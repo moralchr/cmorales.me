@@ -1,27 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const experience = [
-  {
-    role: 'Software/Systems Developer',
-    company: 'Annapurna Construction',
-    period: '2025 —',
-    note: 'Building the internal platform: project management and field apps, QuickBooks/DocuSign integrations, data architecture, and role-based security.',
-  },
-  {
-    role: 'Senior PMO Analyst',
-    company: 'KPMG US',
-    period: '2021 — 2025',
-    note: 'Financial controls and forecasting for state government engagements; automated month-end reporting pipelines with Alteryx.',
-  },
-  {
-    role: 'Administrative Assistant',
-    company: 'Westgate Resorts',
-    period: '2017 — 2021',
-    note: 'Operational analytics and reporting with Excel, SQL, and Tableau.',
-  },
-];
-
 const toolbox = [
   { group: 'Frontend', items: ['React 19', 'TypeScript', 'Vite', 'Astro', 'CSS'] },
   { group: 'Platform', items: ['Power Apps Code Apps', 'Dataverse', 'Power Automate', 'Power BI', 'Microsoft Entra'] },
@@ -75,23 +54,6 @@ const toolbox = [
           this site's <a href="/writing" class="text-accent hover:text-accent-hover">writing section</a>
           is where I keep notes on what I'm learning and building.
         </p>
-      </div>
-
-      <div class="mt-16 pt-8 border-t border-rule">
-        <span class="label" data-reveal>Experience</span>
-        <div class="mt-6">
-          {experience.map((job, i) => (
-            <div class:list={['py-5', i > 0 && 'border-t border-rule']} data-reveal>
-              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                <p class="text-ink font-medium">
-                  {job.role} <span class="text-ink-muted font-normal">· {job.company}</span>
-                </p>
-                <span class="text-ink-faint text-sm font-mono shrink-0">{job.period}</span>
-              </div>
-              <p class="mt-1.5 text-ink-muted text-sm max-w-[540px]">{job.note}</p>
-            </div>
-          ))}
-        </div>
       </div>
 
       <div class="mt-16 pt-8 border-t border-rule">

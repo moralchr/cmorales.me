@@ -110,7 +110,22 @@ order: 1
 ---
 ```
 
-Set `featured: true` to show on the home page. `order` controls home page sort.
+Set `featured: true` to link it under the Annapurna experience group on home. `order` controls sort.
+
+**Project photos:** drop files in `public/images/projects/`, then list them in the project's frontmatter:
+```yaml
+images:
+  - src: "/images/projects/field-app-gantt.jpg"
+    alt: "Gantt schedule view on iPad"
+    caption: "Schedule view in the field app"   # optional
+```
+Omit `images` entirely → placeholder frames render ("Photo coming soon"). Set `images: []` → no gallery section at all.
+
+## Page structure (condensed / progressive disclosure)
+
+- Home = hero → grouped **Experience** (expandable `<details>` per employer; featured projects nested under Annapurna) → stack marquee → writing list
+- Projects = one expandable `<details>` row per project (summary: title/kicker/description; body: tech, prose, photo gallery). Deep links `#project-id` auto-open via script
+- About = bio + toolbox + contact (experience lives on home, not here)
 
 ## GitHub
 

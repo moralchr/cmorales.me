@@ -20,6 +20,18 @@ const projects = defineCollection({
     date: z.coerce.date(),
     kicker: z.string().optional(),
     tech: z.array(z.string()).optional(),
+    // Photos: drop files in public/images/projects/ and list them here.
+    // Omit the field entirely to show placeholder frames; set images: []
+    // to show no gallery at all.
+    images: z
+      .array(
+        z.object({
+          src: z.string(),
+          alt: z.string(),
+          caption: z.string().optional(),
+        })
+      )
+      .optional(),
     url: z.string().optional(),
     github: z.string().optional(),
     featured: z.boolean().default(false),

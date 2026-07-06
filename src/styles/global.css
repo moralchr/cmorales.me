@@ -399,6 +399,173 @@ html.js [data-reveal].revealed {
   color: var(--color-accent-hover);
 }
 
+/* ── Custom cursor (desktop only) ──────────────────────────── */
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 200;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--color-accent);
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.3s ease;
+}
+
+.cursor-ring.is-active {
+  width: 52px;
+  height: 52px;
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ── Section headers (editorial numbering) ─────────────────── */
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+}
+
+/* ── Vertical side label ───────────────────────────────────── */
+
+.vert-label {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* ── Disclosure (details/summary) ──────────────────────────── */
+
+details.disclosure summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details.disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.disc-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.disc-icon::before,
+.disc-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: currentColor;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.disc-icon::before {
+  width: 14px;
+  height: 1.5px;
+}
+
+.disc-icon::after {
+  width: 1.5px;
+  height: 14px;
+}
+
+details[open] .disc-icon::after {
+  transform: rotate(90deg);
+}
+
+details[open] .disclosure-body {
+  animation: fade-up 0.5s var(--ease-out-expo) both;
+}
+
+/* ── Photo gallery + placeholder frames ────────────────────── */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.gallery img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-frame {
+  aspect-ratio: 16 / 10;
+  background: var(--color-paper-alt);
+  border: 1px solid var(--color-rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-frame span {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* ── Big footer marquee ────────────────────────────────────── */
+
+.marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+
+.big-cta:hover .marquee-slow {
+  animation-play-state: paused;
+}
+
+/* ── Magnetic elements ─────────────────────────────────────── */
+
+.magnetic {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out-expo);
+  will-change: transform;
+}
+
 /* ── Reduced motion ────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -414,10 +581,20 @@ html.js [data-reveal].revealed {
     transition: none;
   }
 
-  .marquee {
+  .marquee,
+  .marquee-slow {
     animation: none;
     flex-wrap: wrap;
     width: auto;
+  }
+
+  .magnetic {
+    transition: none;
+    transform: none !important;
+  }
+
+  details[open] .disclosure-body {
+    animation: none;
   }
 
   .scroll-cue-line {

@@ -9,14 +9,24 @@ const socials = [
 <footer class="border-t border-rule mt-24">
   <div class="max-w-[1200px] mx-auto px-6 pt-20 pb-16">
     <div data-reveal>
-      <span class="label">Contact</span>
+      <span class="label px-0">Contact</span>
       <a
         href="mailto:chrismorales5112@gmail.com"
-        class="arrow-link group block mt-6 font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-none text-ink hover:text-accent transition-colors"
+        class="big-cta block mt-6 -mx-6 text-ink hover:text-accent transition-colors"
+        aria-label="Email Chris Morales"
       >
-        Let's talk <span class="arrow inline-block">→</span>
+        <div class="marquee-wrap">
+          <div class="marquee-slow items-baseline gap-10 pr-10 font-display text-[clamp(3.5rem,9vw,7.5rem)] leading-none whitespace-nowrap">
+            {Array.from({ length: 4 }).map(() => (
+              <>
+                <span>Let's talk</span>
+                <span class="text-accent italic" aria-hidden="true">→</span>
+              </>
+            ))}
+          </div>
+        </div>
       </a>
-      <p class="mt-6 text-ink-muted max-w-[480px]">
+      <p class="mt-8 text-ink-muted max-w-[480px] px-0">
         Open to interesting problems in internal tools, integrations,
         and operations software.
       </p>

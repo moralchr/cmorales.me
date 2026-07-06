@@ -6,42 +6,51 @@ const projects = (await getCollection('projects'))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 ---
 
-<BaseLayout title="Projects" description="Selected projects and work by Chris Morales — internal platforms, field software, and integrations.">
+<BaseLayout title="Projects" description="Systems built by Chris Morales — internal platforms, field software, and integrations.">
   <section class="pt-32 pb-24 px-6">
     <div class="max-w-[1200px] mx-auto">
       <span class="label" data-reveal>Projects</span>
-      <h1 class="font-display text-4xl sm:text-5xl mt-4 mb-6" data-reveal>
-        Things I've built
+      <h1 class="font-display text-4xl sm:text-6xl mt-4 mb-6" data-reveal>
+        Systems I've <em class="text-accent">built</em>
       </h1>
-      <p class="text-ink-muted max-w-[560px] mb-16" data-reveal>
-        Most of my work lives in a private monorepo at a construction
-        company, so these are described rather than linked — happy to
-        walk through any of it in detail.
+      <p class="text-ink-muted max-w-[560px] mb-14" data-reveal>
+        Internal software for a construction business — most of it lives
+        in a private monorepo, so it's described rather than linked.
+        Open any entry for the full story.
       </p>
 
       <div>
         {await Promise.all(projects.map(async (project, i) => {
           const { Content } = await render(project);
+          const images = project.data.images;
           return (
-            <article
+            <details
               id={project.id}
-              class:list={['py-14 scroll-mt-24', i > 0 && 'border-t border-rule']}
+              class:list={['disclosure group scroll-mt-24', i > 0 && 'border-t border-rule']}
+              data-reveal
             >
-              <div data-reveal>
-                {project.data.kicker && (
-                  <span class="label text-accent">{project.data.kicker}</span>
-                )}
-                <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mt-3 mb-4">
-                  <h2 class="font-display text-3xl sm:text-4xl">{project.data.title}</h2>
-                  <span class="text-ink-faint text-sm font-mono shrink-0">
-                    {project.data.date.getFullYear()}–
-                  </span>
+              <summary class="py-8 flex items-start gap-6">
+                <span class="work-index pt-2 hidden sm:block">{String(i + 1).padStart(2, '0')}</span>
+                <div class="flex-1">
+                  <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                    <h2 class="font-display text-2xl sm:text-3xl group-hover:text-accent transition-colors">
+                      {project.data.title}
+                    </h2>
+                    <span class="text-ink-faint text-sm font-mono shrink-0">
+                      {project.data.date.getFullYear()}–
+                    </span>
+                  </div>
+                  {project.data.kicker && (
+                    <span class="label text-accent text-[0.65rem]">{project.data.kicker}</span>
+                  )}
+                  <p class="mt-2 text-ink-muted text-sm max-w-[600px]">
+                    {project.data.description}
+                  </p>
                 </div>
+                <span class="disc-icon mt-2 text-ink-muted"></span>
+              </summary>
 
-                <p class="text-ink-muted text-lg max-w-[640px] mb-6">
-                  {project.data.description}
-                </p>
-
+              <div class="disclosure-body pb-12 sm:pl-[calc(3rem+0.5rem)]">
                 {project.data.tech && (
                   <div class="flex flex-wrap gap-x-4 gap-y-1 mb-6">
                     {project.data.tech.map(t => (
@@ -49,40 +58,79 @@ const projects = (await getCollection('projects'))
                     ))}
                   </div>
                 )}
-              </div>
 
-              <div class="prose" data-reveal>
-                <Content />
-              </div>
-
-              {(project.data.url || project.data.github) && (
-                <div class="flex gap-4 mt-6" data-reveal>
-                  {project.data.url && (
-                    <a
-                      href={project.data.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
-                    >
-                      Visit <span class="arrow">→</span>
-                    </a>
-                  )}
-                  {project.data.github && (
-                    <a
-                      href={project.data.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
-                    >
-                      Source <span class="arrow">→</span>
-                    </a>
-                  )}
+                <div class="prose text-sm">
+                  <Content />
                 </div>
-              )}
-            </article>
+
+                {images === undefined ? (
+                  <div class="mt-8">
+                    <span class="label">In pictures</span>
+                    <div class="gallery mt-3 max-w-[720px]">
+                      <div class="photo-frame"><span>Photo coming soon</span></div>
+                      <div class="photo-frame"><span>Photo coming soon</span></div>
+                    </div>
+                  </div>
+                ) : images.length > 0 ? (
+                  <div class="mt-8">
+                    <span class="label">In pictures</span>
+                    <div class="gallery mt-3 max-w-[720px]">
+                      {images.map(img => (
+                        <figure>
+                          <img src={img.src} alt={img.alt} loading="lazy" />
+                          {img.caption && (
+                            <figcaption class="mt-2 text-xs font-mono text-ink-faint">{img.caption}</figcaption>
+                          )}
+                        </figure>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {(project.data.url || project.data.github) && (
+                  <div class="flex gap-4 mt-8">
+                    {project.data.url && (
+                      <a
+                        href={project.data.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
+                      >
+                        Visit <span class="arrow">→</span>
+                      </a>
+                    )}
+                    {project.data.github && (
+                      <a
+                        href={project.data.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
+                      >
+                        Source <span class="arrow">→</span>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </details>
           );
         }))}
       </div>
     </div>
   </section>
+
+  <script>
+    // Deep links (#project-id) should open the target disclosure.
+    function openFromHash() {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el instanceof HTMLDetailsElement) {
+        el.open = true;
+        el.scrollIntoView({ block: 'start' });
+      }
+    }
+    document.addEventListener('astro:page-load', openFromHash);
+    window.addEventListener('hashchange', openFromHash);
+  </script>
 </BaseLayout>
