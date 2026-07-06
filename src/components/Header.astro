@@ -1,0 +1,32 @@
+---
+const pathname = Astro.url.pathname;
+const links = [
+  { href: '/projects', label: 'Projects' },
+  { href: '/writing', label: 'Writing' },
+  { href: '/about', label: 'About' },
+];
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-sm">
+  <nav class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/" class="font-display text-xl text-ink hover:text-ink">
+      <span class="hidden sm:inline">Chris Morales</span>
+      <span class="sm:hidden">CM</span>
+    </a>
+    <div class="flex gap-6 sm:gap-8">
+      {links.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-medium tracking-wide transition-colors',
+            pathname.startsWith(link.href)
+              ? 'text-ink'
+              : 'text-ink-muted hover:text-ink'
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+</header>
