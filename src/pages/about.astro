@@ -1,41 +1,120 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const experience = [
+  {
+    role: 'Software/Systems Developer',
+    company: 'Annapurna Construction',
+    period: '2025 —',
+    note: 'Building the internal platform: project management and field apps, QuickBooks/DocuSign integrations, data architecture, and role-based security.',
+  },
+  {
+    role: 'Senior PMO Analyst',
+    company: 'KPMG US',
+    period: '2021 — 2025',
+    note: 'Financial controls and forecasting for state government engagements; automated month-end reporting pipelines with Alteryx.',
+  },
+  {
+    role: 'Administrative Assistant',
+    company: 'Westgate Resorts',
+    period: '2017 — 2021',
+    note: 'Operational analytics and reporting with Excel, SQL, and Tableau.',
+  },
+];
+
+const toolbox = [
+  { group: 'Frontend', items: ['React 19', 'TypeScript', 'Vite', 'Astro', 'CSS'] },
+  { group: 'Platform', items: ['Power Apps Code Apps', 'Dataverse', 'Power Automate', 'Power BI', 'Microsoft Entra'] },
+  { group: 'Backend & Cloud', items: ['Azure Functions', 'Node.js', 'Bicep', 'Key Vault', 'Service Bus'] },
+  { group: 'Integrations', items: ['QuickBooks Online', 'DocuSign', 'Microsoft Graph', 'SharePoint', 'QuickBooks Time'] },
+];
 ---
 
-<BaseLayout title="About" description="About Chris Morales — software engineer in Orlando, FL.">
+<BaseLayout title="About" description="About Chris Morales — business systems developer in Orlando, FL.">
   <section class="pt-32 pb-24 px-6">
     <div class="max-w-[680px] mx-auto">
-      <span class="label">About</span>
-      <h1 class="font-display text-4xl sm:text-5xl mt-4 mb-10">
-        A bit about me
+      <span class="label" data-reveal>About</span>
+      <h1 class="font-display text-4xl sm:text-5xl mt-4 mb-10" data-reveal>
+        Software for the jobsite
       </h1>
 
       <div class="space-y-6 text-ink-muted leading-relaxed">
-        <p>
-          I'm a software engineer based in Orlando, Florida. I build internal tools,
-          data systems, and automations at a commercial drywall and finishes contractor.
+        <p data-reveal>
+          I'm Chris Morales, a business systems developer in Orlando, Florida.
+          I build the software that runs a commercial drywall and finishes
+          contractor — the project management platform in the office, the
+          field apps on jobsite iPads, and the integrations that keep
+          accounting, contracts, and payroll in sync.
         </p>
 
-        <p>
-          My day-to-day involves React and TypeScript apps on Microsoft's Power Platform,
-          Dataverse integrations, Power Automate flows, and whatever else needs building
-          to keep a construction company running smoothly.
+        <p data-reveal>
+          The interesting part of this work is that construction doesn't
+          forgive flaky software. Superintendents work from spotty jobsite
+          connections, billing has to reconcile to the penny against
+          QuickBooks, and a contract can't go out with the wrong scope
+          attached. So I spend my time on things like offline-resilient
+          write queues, idempotent accounting syncs, and document generation
+          pipelines — built with React, TypeScript, and Dataverse on
+          Microsoft's Power Platform, with an Azure Functions backend
+          handling the third-party integrations.
         </p>
 
-        <p>
-          Before this role I was [your background here — replace with your actual story].
+        <p data-reveal>
+          I got here through operations, not a CS degree. I spent years in
+          operational analytics at Westgate Resorts, then managed program
+          finances as a Senior PMO Analyst at KPMG — where automating my own
+          reporting bottlenecks with Alteryx taught me that the highest-leverage
+          code is the kind that removes work someone dreads doing. That's still
+          the standard I build against. I'm a Microsoft Certified Power
+          Platform Developer (PL-400).
         </p>
 
-        <p>
-          Outside of work, [your interests — replace with what you actually do].
+        <!-- TODO(chris): personalize — hobbies, interests, whatever you want here. -->
+        <p data-reveal>
+          Away from the keyboard I'm usually somewhere around Orlando —
+          this site's <a href="/writing" class="text-accent hover:text-accent-hover">writing section</a>
+          is where I keep notes on what I'm learning and building.
         </p>
       </div>
 
       <div class="mt-16 pt-8 border-t border-rule">
+        <span class="label" data-reveal>Experience</span>
+        <div class="mt-6">
+          {experience.map((job, i) => (
+            <div class:list={['py-5', i > 0 && 'border-t border-rule']} data-reveal>
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                <p class="text-ink font-medium">
+                  {job.role} <span class="text-ink-muted font-normal">· {job.company}</span>
+                </p>
+                <span class="text-ink-faint text-sm font-mono shrink-0">{job.period}</span>
+              </div>
+              <p class="mt-1.5 text-ink-muted text-sm max-w-[540px]">{job.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-16 pt-8 border-t border-rule">
+        <span class="label" data-reveal>What I work with</span>
+        <div class="mt-6 grid sm:grid-cols-2 gap-x-8 gap-y-6">
+          {toolbox.map(t => (
+            <div data-reveal>
+              <p class="text-sm font-medium text-ink">{t.group}</p>
+              <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                {t.items.map(item => (
+                  <span class="text-xs font-mono text-ink-faint">{item}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-16 pt-8 border-t border-rule" data-reveal>
         <span class="label">Get in touch</span>
         <div class="mt-4 space-y-2">
           <p>
-            <a href="mailto:chris@cmorales.me" class="text-accent hover:text-accent-hover transition-colors">
+            <a href="mailto:chris@cmorales.me" class="link-underline text-accent hover:text-accent-hover transition-colors">
               chris@cmorales.me
             </a>
           </p>
@@ -44,9 +123,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               href="https://github.com/moralchr"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-accent hover:text-accent-hover transition-colors"
+              class="link-underline text-accent hover:text-accent-hover transition-colors"
             >
               github.com/moralchr
+            </a>
+          </p>
+          <p>
+            <a
+              href="https://www.linkedin.com/in/cmorales88/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="link-underline text-accent hover:text-accent-hover transition-colors"
+            >
+              linkedin.com/in/cmorales88
             </a>
           </p>
         </div>

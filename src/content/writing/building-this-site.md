@@ -1,21 +1,33 @@
 ---
 title: "Building This Site"
-description: "Notes on designing and building a personal site with Astro and Tailwind."
+description: "Astro 6, Tailwind v4, Cloudflare Pages — and the two dependency bugs that broke the first three deploys."
 date: 2026-07-06
-tags: ["astro", "web"]
+tags: ["astro", "web", "deployment"]
 draft: false
 ---
 
-This is a sample post. Replace it with your own writing.
+This site is intentionally boring infrastructure: Astro 6 with static output, Tailwind CSS v4, Markdown content collections, deployed to Cloudflare Pages on every push to `main`. No SSR, no framework runtime, no database. A personal site is mostly text; the stack should get out of the way of the text.
 
-## Why Astro
+The design is typography-first — Instrument Serif for headings, Space Grotesk for body, a warm paper-and-ink palette with an amber accent. The motion layer (staggered hero reveal, scroll-triggered fades, the marquee) is CSS and a few dozen lines of vanilla JS with `IntersectionObserver`. No animation library; `prefers-reduced-motion` turns all of it off.
 
-Astro's static output and content collections make it a good fit for a personal site that's mostly content with some interactivity.
+Getting the first deploy green was the interesting part. Two dependency bugs, neither of them in my code:
 
-## The Design
+## Two Vites, one build
 
-Typography-driven. Instrument Serif for headings, Space Grotesk for body. Warm palette — paper background, amber accents.
+`astro build` failed with `Missing field 'tsconfigPaths' on BindingViteResolvePluginConfig.resolveOptions` — deep in native bundler bindings. The cause: Astro pinned Vite 7, but `@tailwindcss/vite` resolved Vite 8 (the new Rolldown-based one). Both ended up in `node_modules`, and the Tailwind plugin passed Vite 7-shaped config into Vite 8's native binding, which rejected it.
 
-## What's Next
+The fix is one npm `overrides` entry forcing a single Vite major across the tree:
 
-More writing, more projects, maybe some notes on things I learn along the way.
+```json
+"overrides": {
+  "vite": "^7.3.6"
+}
+```
+
+## The lockfile that only worked on Windows
+
+With the build fixed locally, Cloudflare still failed — `npm ci` refused to install because `@emnapi/runtime` and `@emnapi/core` were "missing from lock file." Those are WASM-side helpers for native binaries that Windows never needs, and npm has a long-standing bug where a lockfile regenerated on one platform can silently drop another platform's optional dependencies.
+
+Local builds passed (Windows never asks for them); Cloudflare's Linux builder did and found holes in the lockfile. Fix: delete `node_modules` and `package-lock.json`, one clean `npm install`, commit the result.
+
+Both failures shared a lesson: the build that matters is the one that runs on someone else's machine.

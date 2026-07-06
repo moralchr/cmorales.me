@@ -48,18 +48,29 @@ cmorales.me/
 - **Mono:** JetBrains Mono (code blocks, metadata labels)
 
 ### Colors
-- `paper` (#f8f7f4) — warm off-white background
-- `ink` (#1c1917) — warm black text
-- `ink-muted` (#78716c) — secondary text
-- `ink-faint` (#a8a29e) — tertiary/metadata
-- `accent` (#b45309) — warm amber for links, highlights
-- `rule` (#e7e5e4) — dividers
+Light and dark themes, both defined as CSS custom properties in `global.css` (`:root` = light, `.dark` = dark). Tailwind `@theme` tokens reference these vars, so utilities respond to the theme class at runtime.
+- `paper` (#f8f7f4 / #151312) — warm off-white / warm near-black background
+- `ink` (#1c1917 / #ece9e4) — text
+- `ink-muted` / `ink-faint` — secondary/tertiary text
+- `accent` (#b45309 / #e8853d) — warm amber for links, highlights
+- `rule` (#e7e5e4 / #2b2724) — dividers
+
+Theme toggle lives in the Header; a no-flash inline script in `BaseLayout` applies `.dark` before paint (localStorage, falls back to `prefers-color-scheme`).
+
+### Motion system
+- Hero: CSS-only staggered line reveal (`.hero-mask`/`.hero-line`) + delayed fades (`.hero-fade`, `--d` custom property)
+- Scroll reveals: add `data-reveal` to any element; an `IntersectionObserver` script in `BaseLayout` fades it up on entry, auto-staggering siblings. Requires `html.js` (set by inline script) so no-JS visitors see content
+- Page transitions: Astro `<ClientRouter />`; scripts re-init on `astro:page-load`, theme re-applies on `astro:after-swap`
+- Micro-interactions: `.link-underline` (animated underline), `.arrow-link`/`.arrow` (arrow slides on hover), header hides on scroll-down/reveals on scroll-up
+- Ambient: fixed grain overlay (`body::after`), `.hero-glow` radial accent, slow stack marquee (`.marquee-wrap`)
+- Everything respects `prefers-reduced-motion`
 
 ### Principles
 - Typography IS the design — large confident headings, generous whitespace
-- No cards, no rounded containers, no gradients
+- No cards, no rounded containers; texture and motion provide depth instead
 - Thin rules (not dashed) to separate content
 - Asymmetric layouts — not everything centered
+- Motion is choreography, not decoration — staggered, eased (`--ease-out-expo`), never blocking
 - Content-first — the text and spacing do the work
 
 ## Commands

@@ -6,13 +6,18 @@ const projects = (await getCollection('projects'))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 ---
 
-<BaseLayout title="Projects" description="Selected projects and work by Chris Morales.">
+<BaseLayout title="Projects" description="Selected projects and work by Chris Morales — internal platforms, field software, and integrations.">
   <section class="pt-32 pb-24 px-6">
     <div class="max-w-[1200px] mx-auto">
-      <span class="label">Projects</span>
-      <h1 class="font-display text-4xl sm:text-5xl mt-4 mb-16">
+      <span class="label" data-reveal>Projects</span>
+      <h1 class="font-display text-4xl sm:text-5xl mt-4 mb-6" data-reveal>
         Things I've built
       </h1>
+      <p class="text-ink-muted max-w-[560px] mb-16" data-reveal>
+        Most of my work lives in a private monorepo at a construction
+        company, so these are described rather than linked — happy to
+        walk through any of it in detail.
+      </p>
 
       <div>
         {await Promise.all(projects.map(async (project, i) => {
@@ -20,53 +25,60 @@ const projects = (await getCollection('projects'))
           return (
             <article
               id={project.id}
-              class:list={['py-12', i > 0 && 'border-t border-rule']}
+              class:list={['py-14 scroll-mt-24', i > 0 && 'border-t border-rule']}
             >
-              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mb-4">
-                <h2 class="font-display text-3xl sm:text-4xl">{project.data.title}</h2>
-                <span class="text-ink-faint text-sm font-mono shrink-0">
-                  {project.data.date.getFullYear()}–
-                </span>
+              <div data-reveal>
+                {project.data.kicker && (
+                  <span class="label text-accent">{project.data.kicker}</span>
+                )}
+                <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mt-3 mb-4">
+                  <h2 class="font-display text-3xl sm:text-4xl">{project.data.title}</h2>
+                  <span class="text-ink-faint text-sm font-mono shrink-0">
+                    {project.data.date.getFullYear()}–
+                  </span>
+                </div>
+
+                <p class="text-ink-muted text-lg max-w-[640px] mb-6">
+                  {project.data.description}
+                </p>
+
+                {project.data.tech && (
+                  <div class="flex flex-wrap gap-x-4 gap-y-1 mb-6">
+                    {project.data.tech.map(t => (
+                      <span class="text-xs font-mono text-ink-faint">{t}</span>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <p class="text-ink-muted text-lg max-w-[640px] mb-6">
-                {project.data.description}
-              </p>
-
-              {project.data.tech && (
-                <div class="flex flex-wrap gap-x-4 gap-y-1 mb-6">
-                  {project.data.tech.map(t => (
-                    <span class="text-xs font-mono text-ink-faint">{t}</span>
-                  ))}
-                </div>
-              )}
-
-              <div class="prose">
+              <div class="prose" data-reveal>
                 <Content />
               </div>
 
-              <div class="flex gap-4 mt-6">
-                {project.data.url && (
-                  <a
-                    href={project.data.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-sm text-accent hover:text-accent-hover transition-colors"
-                  >
-                    Visit →
-                  </a>
-                )}
-                {project.data.github && (
-                  <a
-                    href={project.data.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-sm text-accent hover:text-accent-hover transition-colors"
-                  >
-                    Source →
-                  </a>
-                )}
-              </div>
+              {(project.data.url || project.data.github) && (
+                <div class="flex gap-4 mt-6" data-reveal>
+                  {project.data.url && (
+                    <a
+                      href={project.data.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
+                    >
+                      Visit <span class="arrow">→</span>
+                    </a>
+                  )}
+                  {project.data.github && (
+                    <a
+                      href={project.data.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
+                    >
+                      Source <span class="arrow">→</span>
+                    </a>
+                  )}
+                </div>
+              )}
             </article>
           );
         }))}

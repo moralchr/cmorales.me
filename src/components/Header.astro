@@ -7,18 +7,19 @@ const links = [
 ];
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-sm">
+<header class="site-header fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-sm">
   <nav class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
     <a href="/" class="font-display text-xl text-ink hover:text-ink">
       <span class="hidden sm:inline">Chris Morales</span>
       <span class="sm:hidden">CM</span>
     </a>
-    <div class="flex gap-6 sm:gap-8">
+    <div class="flex items-center gap-6 sm:gap-8">
       {links.map(link => (
         <a
           href={link.href}
+          aria-current={pathname.startsWith(link.href) ? 'page' : undefined}
           class:list={[
-            'text-sm font-medium tracking-wide transition-colors',
+            'link-underline text-sm font-medium tracking-wide transition-colors',
             pathname.startsWith(link.href)
               ? 'text-ink'
               : 'text-ink-muted hover:text-ink'
@@ -27,6 +28,50 @@ const links = [
           {link.label}
         </a>
       ))}
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label="Toggle dark mode"
+        class="text-ink-muted hover:text-ink transition-colors cursor-pointer"
+      >
+        <svg class="dark:hidden" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.5" />
+          <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" />
+        </svg>
+        <svg class="hidden dark:block" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" />
+        </svg>
+      </button>
     </div>
   </nav>
 </header>
+
+<script>
+  // Attached once; survives ClientRouter swaps by querying the header lazily.
+  document.addEventListener('click', e => {
+    if ((e.target as HTMLElement).closest('#theme-toggle')) {
+      const dark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+  });
+
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const header = document.querySelector<HTMLElement>('.site-header');
+    if (!header) return;
+    const y = window.scrollY;
+    header.classList.toggle('scrolled', y > 24);
+    // Hide when scrolling down past the hero, reveal on any scroll up.
+    if (y > 400 && y > lastY) {
+      header.classList.add('hidden-up');
+    } else {
+      header.classList.remove('hidden-up');
+    }
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('astro:page-load', () => {
+    lastY = window.scrollY;
+    onScroll();
+  });
+</script>

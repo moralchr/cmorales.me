@@ -1,31 +1,46 @@
 ---
 const year = new Date().getFullYear();
+const socials = [
+  { href: 'https://github.com/moralchr', label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/cmorales88/', label: 'LinkedIn' },
+  { href: 'mailto:chris@cmorales.me', label: 'Email' },
+];
 ---
 
 <footer class="border-t border-rule mt-24">
-  <div class="max-w-[1200px] mx-auto px-6 py-16">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+  <div class="max-w-[1200px] mx-auto px-6 pt-20 pb-16">
+    <div data-reveal>
+      <span class="label">Contact</span>
+      <a
+        href="mailto:chris@cmorales.me"
+        class="arrow-link group block mt-6 font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-none text-ink hover:text-accent transition-colors"
+      >
+        Let's talk <span class="arrow inline-block">→</span>
+      </a>
+      <p class="mt-6 text-ink-muted max-w-[480px]">
+        Open to interesting problems in internal tools, integrations,
+        and operations software.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mt-20 pt-8 border-t border-rule">
       <div>
         <p class="font-display text-lg">Chris Morales</p>
-        <p class="text-ink-muted text-sm mt-1">Software Engineer · Orlando, FL</p>
+        <p class="text-ink-muted text-sm mt-1">Business Systems Developer · Orlando, FL</p>
       </div>
       <div class="flex gap-6">
-        <a
-          href="https://github.com/moralchr"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-sm text-ink-muted hover:text-ink transition-colors"
-        >
-          GitHub
-        </a>
-        <a
-          href="mailto:chris@cmorales.me"
-          class="text-sm text-ink-muted hover:text-ink transition-colors"
-        >
-          Email
-        </a>
+        {socials.map(s => (
+          <a
+            href={s.href}
+            target={s.href.startsWith('http') ? '_blank' : undefined}
+            rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            class="link-underline text-sm text-ink-muted hover:text-ink transition-colors"
+          >
+            {s.label}
+          </a>
+        ))}
       </div>
     </div>
-    <p class="text-ink-faint text-xs mt-8">&copy; {year} Chris Morales</p>
+    <p class="text-ink-faint text-xs mt-8">&copy; {year} Chris Morales · Built with Astro</p>
   </div>
 </footer>

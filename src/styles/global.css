@@ -1,21 +1,55 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-display: "Instrument Serif", Georgia, serif;
   --font-body: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-  --color-paper: #f8f7f4;
-  --color-paper-alt: #f1efe9;
-  --color-ink: #1c1917;
-  --color-ink-muted: #78716c;
-  --color-ink-faint: #a8a29e;
-  --color-accent: #b45309;
-  --color-accent-hover: #92400e;
-  --color-accent-subtle: #fef3c7;
-  --color-rule: #e7e5e4;
-  --color-code-bg: #292524;
-  --color-code-fg: #e7e5e4;
+  --color-paper: var(--c-paper);
+  --color-paper-alt: var(--c-paper-alt);
+  --color-ink: var(--c-ink);
+  --color-ink-muted: var(--c-ink-muted);
+  --color-ink-faint: var(--c-ink-faint);
+  --color-accent: var(--c-accent);
+  --color-accent-hover: var(--c-accent-hover);
+  --color-accent-subtle: var(--c-accent-subtle);
+  --color-rule: var(--c-rule);
+  --color-code-bg: var(--c-code-bg);
+  --color-code-fg: var(--c-code-fg);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --c-paper: #f8f7f4;
+  --c-paper-alt: #f1efe9;
+  --c-ink: #1c1917;
+  --c-ink-muted: #78716c;
+  --c-ink-faint: #a8a29e;
+  --c-accent: #b45309;
+  --c-accent-hover: #92400e;
+  --c-accent-subtle: #fef3c7;
+  --c-rule: #e7e5e4;
+  --c-code-bg: #292524;
+  --c-code-fg: #e7e5e4;
+  --glow-opacity: 0.35;
+}
+
+.dark {
+  --c-paper: #151312;
+  --c-paper-alt: #1e1b19;
+  --c-ink: #ece9e4;
+  --c-ink-muted: #a39d95;
+  --c-ink-faint: #6e6862;
+  --c-accent: #e8853d;
+  --c-accent-hover: #f5a35f;
+  --c-accent-subtle: #3a2410;
+  --c-rule: #2b2724;
+  --c-code-bg: #1e1b19;
+  --c-code-fg: #d6d2cc;
+  --glow-opacity: 0.14;
 }
 
 html {
@@ -26,6 +60,11 @@ html {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3 {
@@ -82,6 +121,217 @@ pre code {
   color: var(--color-ink-muted);
 }
 
+/* ── Grain overlay ─────────────────────────────────────────── */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.28;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Hero glow ─────────────────────────────────────────────── */
+
+.hero-glow {
+  position: absolute;
+  pointer-events: none;
+  width: 60vw;
+  height: 60vw;
+  max-width: 900px;
+  max-height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-accent-subtle) 0%, transparent 65%);
+  opacity: var(--glow-opacity);
+  filter: blur(40px);
+}
+
+/* ── Animated link underline ───────────────────────────────── */
+
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.link-underline:hover::after,
+.link-underline[aria-current="page"]::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ── Arrow slide on hover ──────────────────────────────────── */
+
+.arrow-link .arrow {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.arrow-link:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* ── Hero entrance (CSS only, staggered) ───────────────────── */
+
+@keyframes hero-line-up {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.hero-line {
+  display: block;
+  opacity: 0;
+  animation: hero-line-up 0.9s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0s);
+}
+
+.hero-fade {
+  opacity: 0;
+  animation: fade-up 0.8s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0s);
+}
+
+/* ── Scroll reveal ─────────────────────────────────────────── */
+
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+html.js [data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Numbered project rows ─────────────────────────────────── */
+
+.work-index {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+  transition: color 0.3s ease;
+}
+
+.work-row:hover .work-index {
+  color: var(--color-accent);
+}
+
+/* ── Stack marquee ─────────────────────────────────────────── */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.marquee-wrap {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-wrap:hover .marquee {
+  animation-play-state: paused;
+}
+
+/* ── Scroll cue ────────────────────────────────────────────── */
+
+@keyframes cue-drop {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+.scroll-cue-line {
+  width: 1px;
+  height: 3rem;
+  background-color: var(--color-ink-faint);
+  animation: cue-drop 2.2s ease-in-out infinite;
+}
+
+/* ── Header states ─────────────────────────────────────────── */
+
+.site-header {
+  transition:
+    transform 0.4s var(--ease-out-expo),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.site-header.scrolled {
+  border-bottom-color: var(--color-rule);
+}
+
+.site-header.hidden-up {
+  transform: translateY(-100%);
+}
+
+/* ── Prose ─────────────────────────────────────────────────── */
+
 .prose {
   max-width: 680px;
 }
@@ -106,6 +356,14 @@ pre code {
 .prose ol {
   margin-bottom: 1.25rem;
   padding-left: 1.5rem;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
 }
 
 .prose li {
@@ -141,17 +399,33 @@ pre code {
   color: var(--color-accent-hover);
 }
 
-@keyframes page-enter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ── Reduced motion ────────────────────────────────────────── */
 
-main {
-  animation: page-enter 0.4s ease both;
+@media (prefers-reduced-motion: reduce) {
+  .hero-line,
+  .hero-fade {
+    animation: none;
+    opacity: 1;
+  }
+
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .marquee {
+    animation: none;
+    flex-wrap: wrap;
+    width: auto;
+  }
+
+  .scroll-cue-line {
+    animation: none;
+  }
+
+  html,
+  body {
+    transition: none;
+  }
 }
