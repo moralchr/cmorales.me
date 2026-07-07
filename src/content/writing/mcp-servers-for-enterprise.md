@@ -3,7 +3,7 @@ title: "MCP Servers for Enterprise Systems"
 description: "Building custom Model Context Protocol servers that connect AI coding assistants to Dataverse, SharePoint, Teams, and Power Automate."
 date: 2026-06-01
 tags: ["ai", "mcp", "developer-tools"]
-draft: false
+draft: true
 ---
 
 The Model Context Protocol (MCP) is a standard for connecting AI assistants to external tools. Instead of the AI guessing at API shapes or asking you to paste data, it can query systems directly through structured tool calls.

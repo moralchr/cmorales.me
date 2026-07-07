@@ -3,7 +3,7 @@ title: "Offline-First Architecture on Power Platform"
 description: "How I built offline resilience into a React app where the SDK hangs forever when connectivity drops."
 date: 2026-06-28
 tags: ["architecture", "power-platform", "offline"]
-draft: false
+draft: true
 ---
 
 When you're building apps for construction sites, you can't assume reliable internet. Crews work in basements, behind concrete walls, in rural areas with one bar of signal. The app needs to keep working.

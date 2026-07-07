@@ -3,12 +3,12 @@ title: "Building This Site"
 description: "Astro 6, Tailwind v4, Cloudflare Pages — and the two dependency bugs that broke the first three deploys."
 date: 2026-07-06
 tags: ["astro", "web", "deployment"]
-draft: false
+draft: true
 ---
 
 This site is intentionally boring infrastructure: Astro 6 with static output, Tailwind CSS v4, Markdown content collections, deployed to Cloudflare Pages on every push to `main`. No SSR, no framework runtime, no database. A personal site is mostly text; the stack should get out of the way of the text.
 
-The design is typography-first — Instrument Serif for headings, Space Grotesk for body, a warm paper-and-ink palette with an amber accent. The motion layer (staggered hero reveal, scroll-triggered fades, the marquee) is CSS and a few dozen lines of vanilla JS with `IntersectionObserver`. No animation library; `prefers-reduced-motion` turns all of it off.
+The design borrows its information design from construction documents — the home page reads like a cover sheet with a sheet index, and the footer is a drawing title block, set in Archivo with IBM Plex Mono annotations on a warm paper-and-ink palette. The motion layer (entrance fades, scroll-triggered reveals) is CSS and a few dozen lines of vanilla JS with `IntersectionObserver`. No animation library; `prefers-reduced-motion` turns all of it off.
 
 Getting the first deploy green was the interesting part. Two dependency bugs, neither of them in my code:
 

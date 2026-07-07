@@ -3,7 +3,7 @@ title: "Git-Managed RBAC for Dataverse"
 description: "Treating security role definitions as code — version-controlled, reviewable, and reconciled automatically."
 date: 2026-05-10
 tags: ["security", "dataverse", "devops"]
-draft: false
+draft: true
 ---
 
 Dataverse security roles are configured through a web UI — a matrix of checkboxes for each table × privilege × depth. It works for small setups, but once you have multiple roles across dozens of tables, it becomes unmanageable. Changes are invisible, unreviewable, and have no audit trail beyond "someone clicked something."

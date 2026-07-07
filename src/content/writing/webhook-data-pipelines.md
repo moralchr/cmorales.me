@@ -3,7 +3,7 @@ title: "Webhook-Driven Data Pipelines"
 description: "Lessons from syncing an accounting platform into a CRM via webhooks, Power Automate, and a lot of entity mapping."
 date: 2026-05-20
 tags: ["data", "power-automate", "integration"]
-draft: false
+draft: true
 ---
 
 Syncing data between two systems that weren't designed to talk to each other is a solved problem in theory and a mess in practice. Here's what I learned building a pipeline that mirrors an accounting platform's data into a CRM in near-real-time.

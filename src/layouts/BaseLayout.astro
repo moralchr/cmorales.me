@@ -36,7 +36,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
@@ -64,8 +64,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
-    <div class="cursor-dot" aria-hidden="true"></div>
-    <div class="cursor-ring" aria-hidden="true"></div>
     {GATED && <ComingSoon />}
     <Header />
     <main>
@@ -103,88 +101,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
       }
 
       document.addEventListener('astro:page-load', initReveals);
-    </script>
-
-    <script>
-      // Cursor follower, magnetic hovers, hero parallax. Desktop pointers only.
-      const fine = window.matchMedia('(pointer: fine)').matches;
-      const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (fine && !noMotion) {
-        let dot: HTMLElement | null = null;
-        let ring: HTMLElement | null = null;
-        const grab = () => {
-          dot = document.querySelector('.cursor-dot');
-          ring = document.querySelector('.cursor-ring');
-        };
-        grab();
-        document.addEventListener('astro:after-swap', grab);
-
-        let mx = -100, my = -100, rx = -100, ry = -100;
-        let seen = false;
-
-        document.addEventListener('pointermove', e => {
-          mx = e.clientX;
-          my = e.clientY;
-          if (!seen) {
-            seen = true;
-            if (dot) dot.style.opacity = '1';
-            if (ring) ring.style.opacity = '1';
-          }
-        });
-
-        const loop = () => {
-          rx += (mx - rx) * 0.16;
-          ry += (my - ry) * 0.16;
-          if (dot) dot.style.transform = `translate(${mx - 3}px, ${my - 3}px)`;
-          if (ring) {
-            const half = ring.offsetWidth / 2;
-            ring.style.transform = `translate(${rx - half}px, ${ry - half}px)`;
-          }
-          requestAnimationFrame(loop);
-        };
-        requestAnimationFrame(loop);
-
-        // Ring grows over anything interactive.
-        document.addEventListener('pointerover', e => {
-          const hot = (e.target as HTMLElement).closest('a, button, summary');
-          ring?.classList.toggle('is-active', !!hot);
-        });
-
-        // Magnetic pull on .magnetic elements.
-        let magnet: HTMLElement | null = null;
-        document.addEventListener('pointermove', e => {
-          const el = (e.target as HTMLElement).closest<HTMLElement>('.magnetic');
-          if (el) {
-            magnet = el;
-            const r = el.getBoundingClientRect();
-            const dx = e.clientX - (r.left + r.width / 2);
-            const dy = e.clientY - (r.top + r.height / 2);
-            el.style.transform = `translate(${dx * 0.18}px, ${dy * 0.28}px)`;
-          } else if (magnet) {
-            magnet.style.transform = '';
-            magnet = null;
-          }
-        });
-
-        // Parallax: [data-parallax="0.2"] drifts at that fraction of scroll.
-        let ticking = false;
-        window.addEventListener(
-          'scroll',
-          () => {
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(() => {
-              document.querySelectorAll<HTMLElement>('[data-parallax]').forEach(el => {
-                const speed = parseFloat(el.dataset.parallax || '0.2');
-                el.style.translate = `0 ${window.scrollY * speed}px`;
-              });
-              ticking = false;
-            });
-          },
-          { passive: true }
-        );
-      }
     </script>
   </body>
 </html>

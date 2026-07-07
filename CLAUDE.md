@@ -42,10 +42,11 @@ cmorales.me/
 
 ## Design System
 
+The visual language borrows the information design of a **construction document set** — used structurally, never as costume. Home is a cover sheet with a sheet index; the footer is a drawing title block; section heads sit on heavy ink rules while content rows use hairlines; mono uppercase "annotations" (`label`, `.tb-label`) carry the metadata. Per-page sheet numbers: CM-000 Cover (home), CM-100 Systems, CM-200 Field notes, CM-300 About, CM-404.
+
 ### Fonts
-- **Display:** Instrument Serif (headings — elegant, warm, distinctive)
-- **Body:** Space Grotesk (clean geometric sans-serif)
-- **Mono:** JetBrains Mono (code blocks, metadata labels)
+- **Display + body:** Archivo (variable: weight + width; one family used at different weights; footer name uses `font-stretch: 115%`)
+- **Mono:** IBM Plex Mono (annotations, sheet numbers, dates, code)
 
 ### Colors
 Light and dark themes, both defined as CSS custom properties in `global.css` (`:root` = light, `.dark` = dark). Tailwind `@theme` tokens reference these vars, so utilities respond to the theme class at runtime.
@@ -58,20 +59,19 @@ Light and dark themes, both defined as CSS custom properties in `global.css` (`:
 Theme toggle lives in the Header; a no-flash inline script in `BaseLayout` applies `.dark` before paint (localStorage, falls back to `prefers-color-scheme`).
 
 ### Motion system
-- Hero: CSS-only staggered line reveal (`.hero-mask`/`.hero-line`) + delayed fades (`.hero-fade`, `--d` custom property)
+- Page entrance: staggered fades only (`.hero-fade`, `--d` custom property) — deliberately restrained
 - Scroll reveals: add `data-reveal` to any element; an `IntersectionObserver` script in `BaseLayout` fades it up on entry, auto-staggering siblings. Requires `html.js` (set by inline script) so no-JS visitors see content
 - Page transitions: Astro `<ClientRouter />`; scripts re-init on `astro:page-load`, theme re-applies on `astro:after-swap`
-- Micro-interactions: `.link-underline` (animated underline), `.arrow-link`/`.arrow` (arrow slides on hover), header hides on scroll-down/reveals on scroll-up
-- Ambient: fixed grain overlay (`body::after`), `.hero-glow` radial accent, slow stack marquee (`.marquee-wrap`)
+- Micro-interactions: `.link-underline` (animated underline), `.arrow-link`/`.arrow` (used sparingly), `.index-row` hover draws a 2px accent tick in the page margin, header hides on scroll-down/reveals on scroll-up
 - Everything respects `prefers-reduced-motion`
 
 ### Principles
-- Typography IS the design — large confident headings, generous whitespace
-- No cards, no rounded containers; texture and motion provide depth instead
-- Thin rules (not dashed) to separate content
-- Asymmetric layouts — not everything centered
-- Motion is choreography, not decoration — staggered, eased (`--ease-out-expo`), never blocking
-- Content-first — the text and spacing do the work
+- Information-first: the work is the hero — projects visible at first glance, no clicks
+- Rule hierarchy carries structure: heavy ink rules for section heads and the title block border, hairline `rule` color between rows
+- No ornament: no grain, glows, marquees, custom cursors, pulsing dots, or section numbering — these read as template/AI-generated and were deliberately removed
+- No cards, no rounded containers
+- Motion is quiet and eased (`--ease-out-expo`), never blocking
+- The construction-document conceit stays discoverable, not loud — sheet numbers and the title block, no fake "blueprint" theming
 
 ## Commands
 
@@ -110,7 +110,7 @@ order: 1
 ---
 ```
 
-Set `featured: true` to link it under the Annapurna experience group on home. `order` controls sort.
+The home-page **Index of systems** lists *all* projects (sorted by `order`), each row deep-linking to `/projects#slug`. The `featured` flag is currently unused by the layout but kept in the schema.
 
 **Project photos:** drop files in `public/images/projects/`, then list them in the project's frontmatter:
 ```yaml
@@ -121,11 +121,12 @@ images:
 ```
 Omit `images` entirely → placeholder frames render ("Photo coming soon"). Set `images: []` → no gallery section at all.
 
-## Page structure (condensed / progressive disclosure)
+## Page structure
 
-- Home = hero → grouped **Experience** (expandable `<details>` per employer; featured projects nested under Annapurna) → stack marquee → writing list
+- Home = cover sheet: compact hero statement (name/role in a mono strip, big two-tone sentence) → **Index of systems** (all projects, flat rows, no disclosure) → **Experience** (one-line `<details>` per employer, bullets inside) → **Field notes** (recent writing)
 - Projects = one expandable `<details>` row per project (summary: title/kicker/description; body: tech, prose, photo gallery). Deep links `#project-id` auto-open via script
 - About = bio + toolbox + contact (experience lives on home, not here)
+- Footer (all pages) = drawing **title block**: name / trade / contact / location / sheet no. / REV (build date) / scale NTS
 
 ## GitHub
 

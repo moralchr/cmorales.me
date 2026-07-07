@@ -3,9 +3,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-display: "Instrument Serif", Georgia, serif;
-  --font-body: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", Consolas, monospace;
 
   --color-paper: var(--c-paper);
   --color-paper-alt: var(--c-paper-alt);
@@ -34,7 +34,6 @@
   --c-rule: #e7e5e4;
   --c-code-bg: #292524;
   --c-code-fg: #e7e5e4;
-  --glow-opacity: 0.35;
 }
 
 .dark {
@@ -49,15 +48,14 @@
   --c-rule: #2b2724;
   --c-code-bg: #1e1b19;
   --c-code-fg: #d6d2cc;
-  --glow-opacity: 0.14;
 }
 
 html {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -69,7 +67,7 @@ body {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -112,40 +110,14 @@ pre code {
   font-size: inherit;
 }
 
+/* Mono annotation — the "lettering" of the drawing set. */
 @utility label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
-}
-
-/* ── Grain overlay ─────────────────────────────────────────── */
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.28;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* ── Hero glow ─────────────────────────────────────────────── */
-
-.hero-glow {
-  position: absolute;
-  pointer-events: none;
-  width: 60vw;
-  height: 60vw;
-  max-width: 900px;
-  max-height: 900px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--color-accent-subtle) 0%, transparent 65%);
-  opacity: var(--glow-opacity);
-  filter: blur(40px);
 }
 
 /* ── Animated link underline ───────────────────────────────── */
@@ -184,23 +156,12 @@ body::after {
   transform: translateX(5px);
 }
 
-/* ── Hero entrance (CSS only, staggered) ───────────────────── */
-
-@keyframes hero-line-up {
-  from {
-    opacity: 0;
-    transform: translateY(105%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ── Entrance fades (page-load stagger via --d) ────────────── */
 
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -208,23 +169,9 @@ body::after {
   }
 }
 
-.hero-mask {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
-}
-
-.hero-line {
-  display: block;
-  opacity: 0;
-  animation: hero-line-up 0.9s var(--ease-out-expo) both;
-  animation-delay: var(--d, 0s);
-}
-
 .hero-fade {
   opacity: 0;
-  animation: fade-up 0.8s var(--ease-out-expo) both;
+  animation: fade-up 0.7s var(--ease-out-expo) both;
   animation-delay: var(--d, 0s);
 }
 
@@ -232,10 +179,10 @@ body::after {
 
 html.js [data-reveal] {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(12px);
   transition:
-    opacity 0.7s var(--ease-out-expo),
-    transform 0.7s var(--ease-out-expo);
+    opacity 0.6s var(--ease-out-expo),
+    transform 0.6s var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0s);
 }
 
@@ -244,8 +191,53 @@ html.js [data-reveal].revealed {
   transform: translateY(0);
 }
 
-/* ── Numbered project rows ─────────────────────────────────── */
+/* ── Section heads — heavy rule, like a drawing division ───── */
 
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--color-ink);
+}
+
+/* ── System index rows ─────────────────────────────────────── */
+
+.index-no {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-ink-faint);
+  transition: color 0.25s ease;
+}
+
+.index-row {
+  position: relative;
+}
+
+/* Accent tick in the page margin on hover — like a revision mark. */
+.index-row::before {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.index-row:hover::before {
+  transform: scaleY(1);
+}
+
+.index-row:hover .index-no {
+  color: var(--color-accent);
+}
+
+/* Legacy numbering on the projects page rows. */
 .work-index {
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -253,63 +245,46 @@ html.js [data-reveal].revealed {
   transition: color 0.3s ease;
 }
 
-.work-row:hover .work-index {
-  color: var(--color-accent);
+/* ── Title block (footer) ──────────────────────────────────── */
+
+.title-block {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--color-rule);
+  border: 1.5px solid var(--color-ink);
 }
 
-/* ── Stack marquee ─────────────────────────────────────────── */
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 40s linear infinite;
-}
-
-.marquee-wrap {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-}
-
-.marquee-wrap:hover .marquee {
-  animation-play-state: paused;
-}
-
-/* ── Scroll cue ────────────────────────────────────────────── */
-
-@keyframes cue-drop {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  45% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  55% {
-    transform: scaleY(1);
-    transform-origin: bottom;
-  }
-  100% {
-    transform: scaleY(0);
-    transform-origin: bottom;
+@media (min-width: 768px) {
+  .title-block {
+    grid-template-columns: minmax(0, 1fr) 15rem 12.5rem;
   }
 }
 
-.scroll-cue-line {
-  width: 1px;
-  height: 3rem;
-  background-color: var(--color-ink-faint);
-  animation: cue-drop 2.2s ease-in-out infinite;
+.tb-cell {
+  background: var(--color-paper);
+  padding: 1.25rem 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.tb-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+.tb-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-stretch: 115%;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 /* ── Header states ─────────────────────────────────────────── */
@@ -337,13 +312,13 @@ html.js [data-reveal].revealed {
 }
 
 .prose h2 {
-  font-size: 2rem;
+  font-size: 1.6rem;
   margin-top: 3rem;
   margin-bottom: 1rem;
 }
 
 .prose h3 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin-top: 2.5rem;
   margin-bottom: 0.75rem;
 }
@@ -375,7 +350,6 @@ html.js [data-reveal].revealed {
   padding-left: 1.25rem;
   margin: 2rem 0;
   color: var(--color-ink-muted);
-  font-style: italic;
 }
 
 .prose img {
@@ -397,75 +371,6 @@ html.js [data-reveal].revealed {
 
 .prose a:hover {
   color: var(--color-accent-hover);
-}
-
-/* ── Custom cursor (desktop only) ──────────────────────────── */
-
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 200;
-  border-radius: 50%;
-  opacity: 0;
-}
-
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--color-accent);
-}
-
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--color-accent);
-  transition: width 0.25s ease, height 0.25s ease, opacity 0.3s ease;
-}
-
-.cursor-ring.is-active {
-  width: 52px;
-  height: 52px;
-}
-
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .cursor-dot,
-  .cursor-ring {
-    display: none;
-  }
-}
-
-/* ── Section headers (editorial numbering) ─────────────────── */
-
-.section-head {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--color-rule);
-}
-
-.section-num {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--color-accent);
-}
-
-/* ── Vertical side label ───────────────────────────────────── */
-
-.vert-label {
-  position: absolute;
-  right: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%) rotate(180deg);
-  writing-mode: vertical-rl;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-ink-faint);
 }
 
 /* ── Disclosure (details/summary) ──────────────────────────── */
@@ -546,30 +451,9 @@ details[open] .disclosure-body {
   color: var(--color-ink-faint);
 }
 
-/* ── Big footer marquee ────────────────────────────────────── */
-
-.marquee-slow {
-  display: flex;
-  width: max-content;
-  animation: marquee 24s linear infinite;
-}
-
-.big-cta:hover .marquee-slow {
-  animation-play-state: paused;
-}
-
-/* ── Magnetic elements ─────────────────────────────────────── */
-
-.magnetic {
-  display: inline-block;
-  transition: transform 0.3s var(--ease-out-expo);
-  will-change: transform;
-}
-
 /* ── Reduced motion ────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-line,
   .hero-fade {
     animation: none;
     opacity: 1;
@@ -581,23 +465,11 @@ details[open] .disclosure-body {
     transition: none;
   }
 
-  .marquee,
-  .marquee-slow {
-    animation: none;
-    flex-wrap: wrap;
-    width: auto;
-  }
-
-  .magnetic {
+  .index-row::before {
     transition: none;
-    transform: none !important;
   }
 
   details[open] .disclosure-body {
-    animation: none;
-  }
-
-  .scroll-cue-line {
     animation: none;
   }
 

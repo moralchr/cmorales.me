@@ -3,7 +3,7 @@ title: "Building React Apps on Power Platform"
 description: "What it's like writing production TypeScript on Microsoft's low-code platform — the good, the weird, and the workarounds."
 date: 2026-06-15
 tags: ["react", "power-platform", "typescript"]
-draft: false
+draft: true
 ---
 
 Power Platform Code Apps let you write standalone React SPAs that deploy to Power Platform and talk to Dataverse through a provided SDK. It's a relatively new capability and the developer experience has sharp edges.

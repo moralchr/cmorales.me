@@ -3,7 +3,7 @@ title: "Custom Gantt Charts in React"
 description: "Why I built a Gantt chart from scratch instead of using a library, and what the SVG-based approach looks like."
 date: 2026-04-15
 tags: ["react", "svg", "data-viz"]
-draft: false
+draft: true
 ---
 
 The field operations app needed a schedule view — crews assigned to jobs across a timeline. Gantt chart territory. I looked at the usual React Gantt libraries and none of them fit: too heavy, wrong interaction model, or impossible to style within the existing design system.
