@@ -1,82 +1,35 @@
 ---
-// Footer as a drawing title block — where a title block actually lives on a
-// construction sheet. REV stamps the build date; sheet number keys off route.
-const now = new Date();
-const year = now.getFullYear();
-const rev = now.toISOString().slice(0, 10);
-
-const path = Astro.url.pathname;
-const sheet = path === '/'
-  ? { no: 'CM-000', name: 'Cover sheet' }
-  : path.startsWith('/projects')
-    ? { no: 'CM-100', name: 'Systems' }
-    : path.startsWith('/writing')
-      ? { no: 'CM-200', name: 'Field notes' }
-      : path.startsWith('/about')
-        ? { no: 'CM-300', name: 'About' }
-        : { no: 'CM-404', name: 'Not found' };
+const year = new Date().getFullYear();
 ---
 
-<footer class="px-6 mt-28 pb-10">
-  <div class="max-w-[1200px] mx-auto" data-reveal>
-    <div class="title-block">
-      <div class="tb-cell flex flex-col justify-between gap-6">
-        <p class="tb-name">Chris<br />Morales</p>
-        <div>
-          <span class="tb-label">Trade</span>
-          <p class="mt-1 text-sm text-ink-muted">
-            Business systems — internal tools, integrations, operations software
-          </p>
-        </div>
+<footer class="border-t border-rule mt-28">
+  <div class="max-w-[1200px] mx-auto px-6 py-14">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
+      <div>
+        <p class="font-serif text-2xl">Chris Morales</p>
+        <p class="text-ink-muted text-sm mt-1">Business Systems Developer · Orlando, FL</p>
+        <p class="text-ink-muted text-sm mt-4 max-w-[400px]">
+          Open to interesting problems in internal tools, integrations,
+          and operations software.
+        </p>
       </div>
-
-      <div class="tb-cell flex flex-col justify-between gap-6">
-        <div>
-          <span class="tb-label">Contact</span>
-          <div class="mt-2 flex flex-col items-start gap-1.5">
-            <a
-              href="mailto:chrismorales5112@gmail.com"
-              class="link-underline text-sm text-ink hover:text-accent transition-colors"
-            >
-              chrismorales5112@gmail.com
-            </a>
-            <a
-              href="https://www.linkedin.com/in/cmorales88/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="link-underline text-sm text-ink hover:text-accent transition-colors"
-            >
-              linkedin.com/in/cmorales88
-            </a>
-          </div>
-        </div>
-        <div>
-          <span class="tb-label">Location</span>
-          <p class="mt-1 text-sm text-ink-muted">Orlando, Florida</p>
-        </div>
-      </div>
-
-      <div class="tb-cell flex flex-col justify-between gap-6">
-        <div>
-          <span class="tb-label">Sheet</span>
-          <p class="mt-1 font-mono text-xl text-ink">{sheet.no}</p>
-          <p class="font-mono text-xs text-ink-muted uppercase tracking-wider">{sheet.name}</p>
-        </div>
-        <div class="space-y-2">
-          <div>
-            <span class="tb-label">Rev</span>
-            <p class="font-mono text-xs text-ink-muted">{rev}</p>
-          </div>
-          <div>
-            <span class="tb-label">Scale</span>
-            <p class="font-mono text-xs text-ink-muted">NTS</p>
-          </div>
-        </div>
+      <div class="flex flex-col items-start sm:items-end gap-2 shrink-0">
+        <a
+          href="mailto:chrismorales5112@gmail.com"
+          class="link-underline text-sm text-ink hover:text-accent transition-colors"
+        >
+          chrismorales5112@gmail.com
+        </a>
+        <a
+          href="https://www.linkedin.com/in/cmorales88/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="link-underline text-sm text-ink hover:text-accent transition-colors"
+        >
+          linkedin.com/in/cmorales88
+        </a>
       </div>
     </div>
-
-    <p class="mt-4 text-ink-faint text-xs font-mono">
-      © {year} Chris Morales · Built with Astro
-    </p>
+    <p class="text-ink-faint text-xs mt-12">&copy; {year} Chris Morales</p>
   </div>
 </footer>

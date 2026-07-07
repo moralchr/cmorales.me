@@ -3,6 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-serif: "Instrument Serif", Georgia, serif;
   --font-display: "Archivo", system-ui, sans-serif;
   --font-body: "Archivo", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", Consolas, monospace;
@@ -34,6 +35,7 @@
   --c-rule: #e7e5e4;
   --c-code-bg: #292524;
   --c-code-fg: #e7e5e4;
+  --glow-opacity: 0.35;
 }
 
 .dark {
@@ -48,6 +50,7 @@
   --c-rule: #2b2724;
   --c-code-bg: #1e1b19;
   --c-code-fg: #d6d2cc;
+  --glow-opacity: 0.14;
 }
 
 html {
@@ -65,11 +68,14 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-h1, h2, h3 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+/* In @layer base so utilities (font-serif, font-normal) can override. */
+@layer base {
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
 }
 
 ::selection {
@@ -156,7 +162,18 @@ pre code {
   transform: translateX(5px);
 }
 
-/* ── Entrance fades (page-load stagger via --d) ────────────── */
+/* ── Hero entrance (CSS only, staggered) ───────────────────── */
+
+@keyframes hero-line-up {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 @keyframes fade-up {
   from {
@@ -169,10 +186,82 @@ pre code {
   }
 }
 
+.hero-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.hero-line {
+  display: block;
+  opacity: 0;
+  animation: hero-line-up 0.9s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0s);
+}
+
 .hero-fade {
   opacity: 0;
   animation: fade-up 0.7s var(--ease-out-expo) both;
   animation-delay: var(--d, 0s);
+}
+
+/* ── Hero glow ─────────────────────────────────────────────── */
+
+.hero-glow {
+  position: absolute;
+  pointer-events: none;
+  width: 60vw;
+  height: 60vw;
+  max-width: 900px;
+  max-height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-accent-subtle) 0%, transparent 65%);
+  opacity: var(--glow-opacity);
+  filter: blur(40px);
+}
+
+/* ── Scroll cue ────────────────────────────────────────────── */
+
+@keyframes cue-drop {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+.scroll-cue-line {
+  width: 1px;
+  height: 3rem;
+  background-color: var(--color-ink-faint);
+  animation: cue-drop 2.2s ease-in-out infinite;
+}
+
+/* ── Vertical side label ───────────────────────────────────── */
+
+.vert-label {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
 }
 
 /* ── Scroll reveal ─────────────────────────────────────────── */
@@ -243,48 +332,6 @@ html.js [data-reveal].revealed {
   font-size: 0.8rem;
   color: var(--color-ink-faint);
   transition: color 0.3s ease;
-}
-
-/* ── Title block (footer) ──────────────────────────────────── */
-
-.title-block {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1px;
-  background: var(--color-rule);
-  border: 1.5px solid var(--color-ink);
-}
-
-@media (min-width: 768px) {
-  .title-block {
-    grid-template-columns: minmax(0, 1fr) 15rem 12.5rem;
-  }
-}
-
-.tb-cell {
-  background: var(--color-paper);
-  padding: 1.25rem 1.5rem;
-  transition: background-color 0.3s ease;
-}
-
-.tb-label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-ink-faint);
-}
-
-.tb-name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-stretch: 115%;
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
 }
 
 /* ── Header states ─────────────────────────────────────────── */
@@ -454,9 +501,14 @@ details[open] .disclosure-body {
 /* ── Reduced motion ────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-line,
   .hero-fade {
     animation: none;
     opacity: 1;
+  }
+
+  .scroll-cue-line {
+    animation: none;
   }
 
   html.js [data-reveal] {

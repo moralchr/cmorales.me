@@ -42,11 +42,12 @@ cmorales.me/
 
 ## Design System
 
-The visual language borrows the information design of a **construction document set** — used structurally, never as costume. Home is a cover sheet with a sheet index; the footer is a drawing title block; section heads sit on heavy ink rules while content rows use hairlines; mono uppercase "annotations" (`label`, `.tb-label`) carry the metadata. Per-page sheet numbers: CM-000 Cover (home), CM-100 Systems, CM-200 Field notes, CM-300 About, CM-404.
+Editorial-technical hybrid: a big Instrument Serif hero and page titles over an information-dense body — flat index rows, heavy ink rules under section heads, hairlines between rows, mono uppercase annotations (`label` utility). The footer is deliberately conventional (name, contact links, copyright): Chris rejected both a marquee CTA and a construction-drawing title block there. No sheet-number conceit anywhere.
 
 ### Fonts
-- **Display + body:** Archivo (variable: weight + width; one family used at different weights; footer name uses `font-stretch: 115%`)
-- **Mono:** IBM Plex Mono (annotations, sheet numbers, dates, code)
+- **Display (serif):** Instrument Serif — hero name, page h1s, header wordmark, footer name. Always pair `font-serif font-normal` (it only ships weight 400; the base h1–h3 rule sets 500 for Archivo)
+- **Interface + body:** Archivo (variable: weight + width)
+- **Mono:** IBM Plex Mono (labels, dates, code)
 
 ### Colors
 Light and dark themes, both defined as CSS custom properties in `global.css` (`:root` = light, `.dark` = dark). Tailwind `@theme` tokens reference these vars, so utilities respond to the theme class at runtime.
@@ -59,19 +60,20 @@ Light and dark themes, both defined as CSS custom properties in `global.css` (`:
 Theme toggle lives in the Header; a no-flash inline script in `BaseLayout` applies `.dark` before paint (localStorage, falls back to `prefers-color-scheme`).
 
 ### Motion system
-- Page entrance: staggered fades only (`.hero-fade`, `--d` custom property) — deliberately restrained
+- Hero: CSS-only staggered line reveal (`.hero-mask`/`.hero-line`) + delayed fades (`.hero-fade`, `--d` custom property); ambient `.hero-glow` radial accent + scroll cue
 - Scroll reveals: add `data-reveal` to any element; an `IntersectionObserver` script in `BaseLayout` fades it up on entry, auto-staggering siblings. Requires `html.js` (set by inline script) so no-JS visitors see content
 - Page transitions: Astro `<ClientRouter />`; scripts re-init on `astro:page-load`, theme re-applies on `astro:after-swap`
 - Micro-interactions: `.link-underline` (animated underline), `.arrow-link`/`.arrow` (used sparingly), `.index-row` hover draws a 2px accent tick in the page margin, header hides on scroll-down/reveals on scroll-up
 - Everything respects `prefers-reduced-motion`
 
 ### Principles
-- Information-first: the work is the hero — projects visible at first glance, no clicks
-- Rule hierarchy carries structure: heavy ink rules for section heads and the title block border, hairline `rule` color between rows
-- No ornament: no grain, glows, marquees, custom cursors, pulsing dots, or section numbering — these read as template/AI-generated and were deliberately removed
+- Big serif name hero for the first impression; the systems index follows immediately — one scroll from name to work, flat rows, no clicks
+- Rule hierarchy carries structure: heavy ink rules for section heads, hairline `rule` color between rows
+- No template ornament: no grain overlay, custom cursors, magnetic hovers, marquees, or "(01)" section numbering — these read as AI-generated and were deliberately removed
 - No cards, no rounded containers
 - Motion is quiet and eased (`--ease-out-expo`), never blocking
-- The construction-document conceit stays discoverable, not loud — sheet numbers and the title block, no fake "blueprint" theming
+- Copy stays professional — no forced-casual words (Chris vetoed "gnarly")
+- Footer is conventional on purpose — professional personal sites end quietly
 
 ## Commands
 
@@ -110,7 +112,7 @@ order: 1
 ---
 ```
 
-The home-page **Index of systems** lists *all* projects (sorted by `order`), each row deep-linking to `/projects#slug`. The `featured` flag is currently unused by the layout but kept in the schema.
+The home-page **Systems** index lists *all* projects (sorted by `order`), each row deep-linking to `/projects#slug`. The `featured` flag is currently unused by the layout but kept in the schema.
 
 **Project photos:** drop files in `public/images/projects/`, then list them in the project's frontmatter:
 ```yaml
@@ -123,10 +125,11 @@ Omit `images` entirely → placeholder frames render ("Photo coming soon"). Set 
 
 ## Page structure
 
-- Home = cover sheet: compact hero statement (name/role in a mono strip, big two-tone sentence) → **Index of systems** (all projects, flat rows, no disclosure) → **Experience** (one-line `<details>` per employer, bullets inside) → **Field notes** (recent writing)
+- Home = full-viewport serif name hero → **Systems** (all projects, flat rows, no disclosure) → **Experience** (one-line `<details>` per employer, bullets inside) → **Writing** (recent posts; section auto-hides while all posts are drafts)
 - Projects = one expandable `<details>` row per project (summary: title/kicker/description; body: tech, prose, photo gallery). Deep links `#project-id` auto-open via script
 - About = bio + toolbox + contact (experience lives on home, not here)
-- Footer (all pages) = drawing **title block**: name / trade / contact / location / sheet no. / REV (build date) / scale NTS
+- Footer (all pages) = conventional: serif name, role/location, short availability line, email + LinkedIn links, copyright
+- Writing posts are all `draft: true` — Chris does not want generated articles published; he'll write his own. Drafts are excluded from routes, lists, and the sitemap
 
 ## GitHub
 
