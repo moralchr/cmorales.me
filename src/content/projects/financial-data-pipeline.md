@@ -3,21 +3,30 @@ title: "Financial Data Pipeline"
 description: "Webhook-driven sync between QuickBooks Online and Dataverse — real-time financial mirrors powering dashboards and automated billing."
 date: 2026-01-01
 kicker: "Automation · Finance"
-tech: ["Power Automate", "Dataverse", "QBO Webhooks", "CloudEvents", "Power BI"]
+tech: ["Power Automate", "Dataverse", "QBO Webhooks", "CloudEvents", "Power BI", "Power Query"]
 featured: false
 order: 5
 ---
 
-Designed a webhook-driven data pipeline that mirrors QuickBooks Online entities into Dataverse in near-real-time. The pipeline powers financial dashboards in Power BI and enables the PM app to show live cost and billing data alongside operational project data.
+Designed a webhook-driven data pipeline that mirrors QuickBooks Online entities into Dataverse in near-real-time. The pipeline powers financial dashboards in Power BI and lets the PM app show live cost and billing data alongside operational project data.
 
 ### Architecture
 
-A single dispatcher flow receives QBO webhook events and routes them to entity-specific child flows — one each for customers, vendors, invoices, bills, purchase orders, estimates, and journal entries. Each child flow handles creates, updates, and deletes for its entity type, with line items and linked transactions managed as child records.
+- **A single HTTP-triggered dispatcher flow routes QBO webhook events to 12 entity-specific child flows** — customers, vendors, invoices, bills, purchase orders, estimates, journal entries, and more — plus dedicated delete and void handlers
+- **Designed for failure first** — handlers are idempotent (upsert by external ID, because webhooks fire more than once), tolerate out-of-order events (retry when a line item arrives before its parent), and ignore unknown fields so upstream schema drift doesn't break the pipeline
+- **Try/Catch error architecture** — business steps wrapped in Scopes with catch scopes writing failures back to the record itself, so support can see why a sync failed without opening flow run history
+- **Estate-level governance** — audited the full environment (**55 flows** at last count) with triggers, states, and connection ownership mapped; connections migrated to service accounts so automations survive personnel changes
 
 ### CloudEvents migration
 
-Migrated the webhook dispatcher from a legacy format to CloudEvents — a standardized envelope for event data. Built a shim layer so the new format could be processed alongside the old one during a parallel-run period. The migration was driven by a change in the accounting platform's webhook API, not an elective refactoring choice.
+Led a live migration of the dispatcher to the CloudEvents envelope format using a shim layer and a **parallel-run cutover with a documented decommission date** — both formats processed side by side until the old one was retired.
 
-### Bridging financial and operational data
+### Reconciliation finds
 
-The trickiest part wasn't the sync itself but mapping financial entities to operational ones. The accounting system's "customers" don't map 1:1 to construction projects — older records use a three-level hierarchy (GC → sub-customer → project) while newer ones are flat. The resolver had to handle both shapes.
+Never trust a rollup you haven't reconciled against the source of record:
+
+- Found **$2.9M in costs that had lost project attribution** during a data-source migration, traced the root cause in the M/DAX bridge logic, and fixed it
+- Identified and fixed **~1,479 mis-priced legacy rows** in a pricing cleanup
+- Diagnosed a silent gap where "print later" bill payments never surfaced in the changes feed, shipped a re-sync fix, backfilled **25 bills** whose paid-status had drifted, and documented the failure mode so it's institutional knowledge
+
+The trickiest ongoing problem is entity mapping: the accounting system's customers don't map 1:1 to construction projects — older records use a three-level hierarchy (GC → sub-customer → project) while newer ones are flat, and the resolver handles both shapes so rollups don't double-count.

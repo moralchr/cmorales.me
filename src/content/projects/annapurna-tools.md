@@ -13,9 +13,13 @@ Designed and built a monorepo architecture for a suite of line-of-business apps 
 ### Architecture
 
 - **Monorepo with workspace dependencies** — shared package resolved at build time via Vite aliases, no separate build step
-- **Automated quality gate** — GitHub Actions workflow runs typecheck, tests, and build on every push; auto-merges to main on green
-- **Dataverse integration layer** — type coercion helpers for the all-strings SDK, GUID normalization, OData filter builders, and a two-tier availability pattern with mock fallback for local development
-- **Git-managed security roles** — JSON specs checked into the repo, diffed and applied to Dataverse via a reconciler script
+- **Shared utility package as the pattern library** — offline queue, timeout wrappers, type coercion, error extraction — so every new app inherits reliability instead of re-learning it
+- **Automated quality gate** — every change runs typecheck, the full test suite, and a production build; merge happens only on green. The suite includes a schema-drift integration test and a data-source registration test that catch whole classes of silent failures
+- **Dataverse foundation** — led a schema migration of **39K+ records** across legacy and new tables, resolving duplicate data and scaling limits while preserving relationships and validating production readiness
+
+### Knowledge base as infrastructure
+
+Documentation is bound to events, not intentions: a hard debugging session triggers a postmortem, an architecture choice triggers a decision record (**27+ numbered decision records to date**), every working session ends with a handoff note recording state, next steps, and landmines. Postmortems carry an hours-lost estimate, rolled up into a "Pain Index" that ranks defect classes by operational cost — so preventive work goes where the pain actually is.
 
 ### What made it interesting
 

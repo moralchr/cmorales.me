@@ -13,17 +13,22 @@ A unified project management app that replaced a patchwork of spreadsheets, emai
 ### Modules
 
 - **Job dashboard** — central view of all active projects with status, financial summary, and team contacts
-- **Budget tracking** — three-layer architecture (on-site budgets, internal change orders, labor budgets) that rolls up to a unified financial view
+- **Budget tracking** — three-layer architecture (on-site budgets, internal change orders, labor budgets) that rolls up to a unified financial view while each layer keeps its granularity for auditing
 - **Change order workflow** — COR creation, revision tracking, approval status, conversion to executed change orders
 - **T&M tickets** — time and materials documentation with labor and material line items
 - **Subcontractor management** — contract tracking, insurance compliance, job assignments
 
-### Three-layer budget architecture
+### Controls encoded in the system
 
-The budget system uses three interconnected layers rather than a single flat budget table. On-site field budgets capture what's happening in the field. Internal change orders track scope changes that affect cost. Labor budgets break down the work by category. Each layer syncs upward so the PM sees a single rolled-up number, but the source data maintains its granularity for auditing and reporting.
+- **Compliance gating on subcontract issuance** — the issuance wizard blocks until the subcontractor has a current master agreement, W-9, and certificate of insurance on file. A preventive control enforced in software at the point of action, not a policy memo
+- **A cycle-time KPI the business didn't have** — days from "signed T&M ticket sent to the GC" to "change order request billed," with agreed amber (≥ 7 days) and red (≥ 14 days) thresholds surfaced in the app, so billing lag is monitored continuously instead of computed once for a slide
+
+### Launched as a designed experiment
+
+The T&M capture pilot launched with **five success metrics written into the spec before go-live** — review latency, PM adjustment rate, offline reliability, GC sign-off completion, invoice cycle time — a named pilot user trained from a checklist, an explicit one-week parallel run alongside the old spreadsheets, and a written rollback plan with a dated commit-or-extend decision.
 
 ### Subcontract issuance
 
-A wizard walks coordinators through scoping a subcontract, then generates the actual Word contract document client-side in TypeScript (via the `docx` library) — no server round-trip, no template drift. A five-stage tracker follows the document through DocuSign signing, and compliance gating blocks issuance until the subcontractor has a current MSA, W-9, and certificate of insurance on file.
+A wizard walks coordinators through scoping a subcontract, then generates the actual Word contract document client-side in TypeScript (via the `docx` library) — no server round-trip, no template drift. A five-stage tracker follows the document through DocuSign signing.
 
 One platform constraint shaped this feature: Code Apps run under a strict Content Security Policy that blocks direct calls to external services, so documents route to SharePoint and DocuSign through Dataverse file columns and Power Automate flows — indirection imposed by the platform that turned a simple feature into a real design problem.

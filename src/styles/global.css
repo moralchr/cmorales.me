@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-serif: "Archivo", system-ui, sans-serif;
   --font-display: "Archivo", system-ui, sans-serif;
   --font-body: "Archivo", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", Consolas, monospace;
@@ -24,33 +24,33 @@
 }
 
 :root {
-  --c-paper: #f8f7f4;
-  --c-paper-alt: #f1efe9;
-  --c-ink: #1c1917;
-  --c-ink-muted: #78716c;
-  --c-ink-faint: #a8a29e;
-  --c-accent: #b45309;
-  --c-accent-hover: #92400e;
-  --c-accent-subtle: #fef3c7;
-  --c-rule: #e7e5e4;
-  --c-code-bg: #292524;
-  --c-code-fg: #e7e5e4;
-  --glow-opacity: 0.35;
+  --c-paper: #ffffff;
+  --c-paper-alt: #f4f7fa;
+  --c-ink: #0f172a;
+  --c-ink-muted: #5a6472;
+  --c-ink-faint: #94a3b8;
+  --c-accent: #1a5c8a;
+  --c-accent-hover: #14486d;
+  --c-accent-subtle: #eef4f8;
+  --c-rule: #e2e8f0;
+  --c-code-bg: #1e293b;
+  --c-code-fg: #e2e8f0;
+  --glow-opacity: 0.5;
 }
 
 .dark {
-  --c-paper: #151312;
-  --c-paper-alt: #1e1b19;
-  --c-ink: #ece9e4;
-  --c-ink-muted: #a39d95;
-  --c-ink-faint: #6e6862;
-  --c-accent: #e8853d;
-  --c-accent-hover: #f5a35f;
-  --c-accent-subtle: #3a2410;
-  --c-rule: #2b2724;
-  --c-code-bg: #1e1b19;
-  --c-code-fg: #d6d2cc;
-  --glow-opacity: 0.14;
+  --c-paper: #0f1419;
+  --c-paper-alt: #161d24;
+  --c-ink: #e2e8f0;
+  --c-ink-muted: #94a3b8;
+  --c-ink-faint: #5a6472;
+  --c-accent: #6aa8d4;
+  --c-accent-hover: #8dbde0;
+  --c-accent-subtle: #1c2a38;
+  --c-rule: #243040;
+  --c-code-bg: #161d24;
+  --c-code-fg: #cbd5e1;
+  --glow-opacity: 0.25;
 }
 
 html {
@@ -68,11 +68,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* In @layer base so utilities (font-serif, font-normal) can override. */
+/* In @layer base so utilities can override. */
 @layer base {
   h1, h2, h3 {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 650;
     line-height: 1.1;
     letter-spacing: -0.02em;
   }
@@ -124,6 +124,28 @@ pre code {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
+}
+
+/* Tech / skill tag pill. */
+@utility pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--color-ink-muted);
+  background: var(--color-accent-subtle);
+  border: 1px solid var(--color-rule);
+  border-radius: 999px;
+  padding: 0.4rem 0.7rem;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.pill:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 /* ── Animated link underline ───────────────────────────────── */

@@ -1,19 +1,56 @@
 ---
+import fs from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
-const posts = (await getCollection('writing', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 4);
-
-const systems = (await getCollection('projects'))
+const projects = (await getCollection('projects'))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+// Drop a photo at public/images/profile.jpg and it appears automatically.
+const hasProfilePhoto = fs.existsSync(new URL('../../public/images/profile.jpg', import.meta.url));
+
+const skills = [
+  {
+    group: 'Microsoft stack',
+    items: [
+      'Power Automate', 'Power Apps Code Apps', 'Dataverse', 'Power BI', 'Power Query',
+      'SharePoint Online', 'Microsoft Teams', 'AI Builder', 'Entra ID', 'Microsoft Graph', 'MSAL',
+    ],
+  },
+  {
+    group: 'Engineering',
+    items: [
+      'TypeScript', 'React 19', 'Node.js', 'Vite', 'Vitest', 'Playwright',
+      'Git / GitHub', 'GitHub Actions CI/CD', 'Astro',
+    ],
+  },
+  {
+    group: 'Integrations',
+    items: [
+      'QuickBooks Online', 'QuickBooks Time', 'DocuSign', 'CloudEvents', 'Webhooks', 'REST / OData',
+    ],
+  },
+  {
+    group: 'AI tooling',
+    items: [
+      'AI Builder GPT prompts', 'Document extraction', 'AI summarization & translation',
+      'MCP servers', 'AI-assisted development',
+    ],
+  },
+  {
+    group: 'Practices',
+    items: [
+      'Decision records', 'Runbooks & postmortems', 'RBAC-as-code', 'Structured pilots',
+      'Parallel-run cutovers', 'Backlog management', 'User training & SOPs',
+    ],
+  },
+];
 
 const experience = [
   {
     company: 'Annapurna Construction',
     role: 'Software/Systems Developer',
-    period: '2025 — Now',
+    period: 'Oct 2025 — Present',
     summary:
       'Building the internal platform for a commercial construction company — project management and field apps, accounting integrations, and the data architecture underneath.',
     bullets: [
@@ -27,7 +64,7 @@ const experience = [
   {
     company: 'KPMG US',
     role: 'Senior PMO Analyst',
-    period: '2021 — 2025',
+    period: 'Jan 2021 — Oct 2025',
     summary:
       'Program financials and reporting automation for state-government consulting engagements.',
     bullets: [
@@ -40,7 +77,7 @@ const experience = [
   {
     company: 'Westgate Resorts',
     role: 'Administrative Assistant',
-    period: '2017 — 2021',
+    period: 'Aug 2017 — Jan 2021',
     summary: 'Operational analytics and reporting for resort operations.',
     bullets: [
       'Produced operational analytics with Excel, SQL, and Tableau to improve productivity and leadership visibility',
@@ -51,99 +88,118 @@ const experience = [
 ---
 
 <BaseLayout title="Home">
-  <section class="relative min-h-screen flex flex-col justify-center px-6 overflow-hidden">
-    <div class="hero-glow top-[-10%] right-[-10%]"></div>
-    <span class="vert-label hidden lg:block">Business Systems Developer — Orlando, FL</span>
-    <div class="max-w-[1200px] mx-auto w-full relative">
-      <p class="hero-fade label flex items-center gap-2.5" style="--d: 0.05s">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-        </span>
-        Building at Annapurna Construction
-      </p>
-      <h1 class="mt-6 font-serif font-normal text-[clamp(4rem,11vw,9.5rem)] leading-[0.92] tracking-tight">
-        <span class="hero-mask"><span class="hero-line" style="--d: 0.15s">Chris</span></span>
-        <span class="hero-mask"><span class="hero-line italic text-accent" style="--d: 0.28s">Morales</span></span>
-      </h1>
-      <div class="mt-10 grid sm:grid-cols-[1fr_auto] gap-8 items-end">
-        <p class="hero-fade max-w-[480px] text-ink-muted text-lg leading-relaxed" style="--d: 0.5s">
-          I build the software that runs a construction company —
-          the apps in the office, the tools on the jobsite, and the
-          integrations holding the books together.
-        </p>
-        <div class="hero-fade flex gap-7" style="--d: 0.65s">
-          <a
-            href="https://www.linkedin.com/in/cmorales88/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="link-underline text-sm font-medium text-ink-muted hover:text-ink transition-colors"
-          >
-            LinkedIn
-          </a>
-          <a
-            href="mailto:chrismorales5112@gmail.com"
-            class="link-underline text-sm font-medium text-ink-muted hover:text-ink transition-colors"
-          >
-            Email
-          </a>
+  <!-- Hero + About, merged -->
+  <section id="top" class="relative pt-36 pb-20 px-6 overflow-hidden">
+    <div class="hero-glow top-[-20%] right-[-15%]"></div>
+    <div class="max-w-[1200px] mx-auto relative">
+      <div class="grid md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-start">
+        <div class="max-w-[640px]">
+          <p class="hero-fade label flex items-center gap-2.5" style="--d: 0.05s">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+            </span>
+            Open to opportunities · Orlando, FL
+          </p>
+          <h1 class="mt-6 text-[clamp(2.75rem,6vw,4.5rem)] leading-[1.02] tracking-tight">
+            <span class="hero-mask"><span class="hero-line" style="--d: 0.15s">Chris Morales</span></span>
+          </h1>
+          <p class="hero-fade mt-3 text-xl text-accent font-medium" style="--d: 0.3s">
+            Business Systems Developer
+          </p>
+
+          <div class="hero-fade mt-8 space-y-5 text-ink-muted leading-relaxed" style="--d: 0.45s">
+            <p>
+              I build the software that runs a commercial construction company —
+              the project management platform in the office, the field apps on
+              jobsite iPads, and the integrations that keep accounting,
+              contracts, and payroll in sync.
+            </p>
+            <p>
+              Construction doesn't forgive flaky software. Superintendents work
+              from spotty jobsite connections, billing has to reconcile to the
+              penny against QuickBooks, and a contract can't go out with the
+              wrong scope attached. So I spend my time on offline-resilient
+              write queues, idempotent accounting syncs, and document pipelines —
+              React and TypeScript on Microsoft's Power Platform.
+            </p>
+            <p>
+              I got here through operations, not a CS degree: operational
+              analytics at Westgate Resorts, then program finances as a Senior
+              PMO Analyst at KPMG — where automating my own reporting
+              bottlenecks taught me that the highest-leverage code removes work
+              someone dreads doing. I'm a Microsoft Certified Power Platform
+              Developer (PL-400).
+            </p>
+          </div>
+
+          <div class="hero-fade mt-8 flex flex-wrap gap-7" style="--d: 0.6s">
+            <a
+              href="mailto:chrismorales5112@gmail.com"
+              class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+            >
+              Email
+            </a>
+            <a
+              href="https://www.linkedin.com/in/cmorales88/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="/resume"
+              class="link-underline text-sm font-medium text-ink-muted hover:text-ink transition-colors"
+            >
+              Resume
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-fade md:order-last order-first mx-auto md:mx-0" style="--d: 0.35s">
+          {hasProfilePhoto ? (
+            <img
+              src="/images/profile.jpg"
+              alt="Chris Morales"
+              width="280"
+              height="336"
+              class="w-[220px] md:w-[280px] aspect-[5/6] object-cover rounded-2xl border border-rule"
+            />
+          ) : (
+            <div class="w-[220px] md:w-[280px] aspect-[5/6] rounded-2xl bg-paper-alt border border-rule flex items-center justify-center">
+              <span class="font-mono text-xs tracking-[0.15em] uppercase text-ink-faint">Photo</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
-    <div class="hero-fade absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3" style="--d: 1.1s">
-      <span class="label text-[0.65rem]">Scroll</span>
-      <span class="scroll-cue-line"></span>
-    </div>
   </section>
 
-  <!-- Every system, one glance, no clicks. -->
-  <section class="px-6 pt-24 pb-20">
+  <!-- Skills / software inventory -->
+  <section id="skills" class="px-6 pb-20 scroll-mt-24">
     <div class="max-w-[1200px] mx-auto">
       <div class="section-head" data-reveal>
-        <h2 class="label text-ink">Systems</h2>
-        <span class="label">{String(systems.length).padStart(2, '0')}</span>
+        <h2 class="label text-ink">Skills</h2>
+        <span class="label">Software inventory</span>
       </div>
-
-      <div>
-        {systems.map((p, i) => (
-          <a
-            href={`/projects#${p.id}`}
-            class="index-row group grid grid-cols-[2rem_1fr] sm:grid-cols-[3.5rem_1fr_auto] gap-x-2 py-5 border-b border-rule"
-            data-reveal
-          >
-            <span class="index-no pt-1">{String(i + 1).padStart(2, '0')}</span>
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-baseline gap-x-4 gap-y-0.5">
-                <h3 class="text-lg sm:text-xl font-medium tracking-tight group-hover:text-accent transition-colors">
-                  {p.data.title}
-                </h3>
-                {p.data.kicker && (
-                  <span class="label text-[0.62rem] hidden sm:inline">{p.data.kicker}</span>
-                )}
-              </div>
-              <p class="mt-1.5 text-sm text-ink-muted leading-relaxed max-w-[680px]">
-                {p.data.description}
-              </p>
+      <div class="mt-8 space-y-8">
+        {skills.map(s => (
+          <div class="grid sm:grid-cols-[180px_1fr] gap-x-8 gap-y-2" data-reveal>
+            <p class="text-sm font-medium text-ink pt-1">{s.group}</p>
+            <div class="flex flex-wrap gap-2">
+              {s.items.map(item => (
+                <span class="pill">{item}</span>
+              ))}
             </div>
-            <span class="hidden sm:block font-mono text-xs text-ink-faint pt-1.5">
-              {p.data.date.getUTCFullYear()}–
-            </span>
-          </a>
+          </div>
         ))}
       </div>
-
-      <a
-        href="/projects"
-        class="arrow-link inline-block mt-6 text-sm font-medium text-ink-muted hover:text-ink transition-colors"
-        data-reveal
-      >
-        Full write-ups and screenshots <span class="arrow">→</span>
-      </a>
     </div>
   </section>
 
-  <!-- Experience: on record, one line each, open for the bullets. -->
-  <section class="px-6 pb-20">
+  <!-- Experience -->
+  <section id="experience" class="px-6 pb-20 scroll-mt-24">
     <div class="max-w-[1200px] mx-auto">
       <div class="section-head" data-reveal>
         <h2 class="label text-ink">Experience</h2>
@@ -152,58 +208,176 @@ const experience = [
 
       <div>
         {experience.map(job => (
-          <details class="disclosure group border-b border-rule" data-reveal>
-            <summary class="py-5 flex items-baseline gap-4">
-              <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
-                <h3 class="text-base font-medium tracking-tight group-hover:text-accent transition-colors">
-                  {job.company}
-                </h3>
-                <span class="text-sm text-ink-muted">{job.role}</span>
+          <div class="py-8 border-b border-rule" data-reveal>
+            <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
+                <h3 class="text-lg font-medium tracking-tight">{job.company}</h3>
+                <span class="text-sm text-accent">{job.role}</span>
               </div>
               <span class="font-mono text-xs text-ink-faint shrink-0">{job.period}</span>
-              <span class="disc-icon self-center text-ink-muted"></span>
-            </summary>
-            <div class="disclosure-body pb-8 max-w-[720px]">
-              <p class="text-sm text-ink-muted">{job.summary}</p>
-              <ul class="mt-4 space-y-2.5">
-                {job.bullets.map(b => (
-                  <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
-                    <span class="text-accent shrink-0 mt-0.5">—</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
             </div>
-          </details>
+            <p class="mt-2 text-sm text-ink-muted max-w-[720px]">{job.summary}</p>
+            <ul class="mt-4 space-y-2.5 max-w-[720px]">
+              {job.bullets.map(b => (
+                <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
+                  <span class="text-accent shrink-0 mt-0.5">—</span>
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
+      </div>
+
+      <div class="mt-8 grid sm:grid-cols-[180px_1fr] gap-x-8 gap-y-2" data-reveal>
+        <p class="label pt-1">Certifications &amp; Education</p>
+        <div class="space-y-1.5 text-sm text-ink-muted">
+          <p>
+            <span class="text-ink font-medium">Microsoft Certified: Power Platform Developer Associate (PL-400)</span>
+          </p>
+          <p>A.A. in Information Technology — Valencia College, 2020</p>
+        </div>
       </div>
     </div>
   </section>
 
-  {posts.length > 0 && (
-    <section class="px-6 pb-8">
-      <div class="max-w-[1200px] mx-auto">
-        <div class="section-head" data-reveal>
-          <h2 class="label text-ink">Writing</h2>
-          <a href="/writing" class="label link-underline text-ink">All posts</a>
-        </div>
-        <div>
-          {posts.map(post => (
-            <a
-              href={`/writing/${post.id}`}
-              class="group flex items-baseline justify-between gap-4 py-4 border-b border-rule"
+  <!-- Projects, expanded -->
+  <section id="projects" class="px-6 pb-20 scroll-mt-24">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="section-head" data-reveal>
+        <h2 class="label text-ink">Projects</h2>
+        <span class="label">{String(projects.length).padStart(2, '0')}</span>
+      </div>
+      <p class="mt-6 text-ink-muted text-sm max-w-[560px]" data-reveal>
+        Internal software for a construction business — most of it lives in a
+        private monorepo, so it's described rather than linked.
+      </p>
+
+      <div class="mt-4">
+        {await Promise.all(projects.map(async (project, i) => {
+          const { Content } = await render(project);
+          const images = project.data.images;
+          return (
+            <article
+              id={project.id}
+              class:list={['py-12 scroll-mt-24', i > 0 && 'border-t border-rule']}
               data-reveal
             >
-              <h3 class="text-base font-medium tracking-tight text-ink group-hover:text-accent transition-colors">
-                {post.data.title}
-              </h3>
-              <span class="text-ink-faint text-xs font-mono shrink-0">
-                {post.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-              </span>
-            </a>
-          ))}
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                <h3 class="text-xl sm:text-2xl">{project.data.title}</h3>
+                <span class="text-ink-faint text-sm font-mono shrink-0">
+                  {project.data.date.getUTCFullYear()}–
+                </span>
+              </div>
+              {project.data.kicker && (
+                <span class="label text-accent text-[0.65rem]">{project.data.kicker}</span>
+              )}
+              <p class="mt-2 text-ink-muted text-sm max-w-[640px]">
+                {project.data.description}
+              </p>
+
+              {project.data.tech && (
+                <div class="flex flex-wrap gap-2 mt-5">
+                  {project.data.tech.map(t => (
+                    <span class="pill">{t}</span>
+                  ))}
+                </div>
+              )}
+
+              <div class="prose text-sm mt-6">
+                <Content />
+              </div>
+
+              {images === undefined ? (
+                <div class="mt-8">
+                  <span class="label">In pictures</span>
+                  <div class="gallery mt-3 max-w-[720px]">
+                    <div class="photo-frame"><span>Photo coming soon</span></div>
+                    <div class="photo-frame"><span>Photo coming soon</span></div>
+                  </div>
+                </div>
+              ) : images.length > 0 ? (
+                <div class="mt-8">
+                  <span class="label">In pictures</span>
+                  <div class="gallery mt-3 max-w-[720px]">
+                    {images.map(img => (
+                      <figure>
+                        <img src={img.src} alt={img.alt} loading="lazy" />
+                        {img.caption && (
+                          <figcaption class="mt-2 text-xs font-mono text-ink-faint">{img.caption}</figcaption>
+                        )}
+                      </figure>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {(project.data.url || project.data.github) && (
+                <div class="flex gap-4 mt-8">
+                  {project.data.url && (
+                    <a
+                      href={project.data.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
+                    >
+                      Visit <span class="arrow">→</span>
+                    </a>
+                  )}
+                  {project.data.github && (
+                    <a
+                      href={project.data.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
+                    >
+                      Source <span class="arrow">→</span>
+                    </a>
+                  )}
+                </div>
+              )}
+            </article>
+          );
+        }))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="px-6 pb-8 scroll-mt-24">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="section-head" data-reveal>
+        <h2 class="label text-ink">Contact</h2>
+      </div>
+      <div class="mt-8 max-w-[640px]" data-reveal>
+        <p class="text-ink-muted leading-relaxed">
+          The fastest way to reach me is email. I'm open to conversations about
+          internal tools, integrations, and operations software.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-7">
+          <a
+            href="mailto:chrismorales5112@gmail.com"
+            class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+          >
+            chrismorales5112@gmail.com
+          </a>
+          <a
+            href="https://www.linkedin.com/in/cmorales88/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+          >
+            linkedin.com/in/cmorales88
+          </a>
+          <a
+            href="/resume/Christopher-Morales-Resume.pdf"
+            class="link-underline text-sm font-medium text-ink-muted hover:text-ink transition-colors"
+            download
+          >
+            Download resume
+          </a>
         </div>
       </div>
-    </section>
-  )}
+    </div>
+  </section>
 </BaseLayout>

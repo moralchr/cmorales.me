@@ -1,26 +1,29 @@
 ---
-title: "AI Developer Tooling"
-description: "Custom MCP servers that give AI coding assistants direct access to Dataverse, SharePoint, Teams, and Power Automate — turning enterprise systems into AI-accessible tools."
+title: "AI Tooling & Document Intelligence"
+description: "Production AI features — document extraction, summarization, translation — plus custom MCP servers that give AI coding assistants direct access to the Microsoft enterprise stack."
 date: 2026-05-01
-kicker: "Developer Tooling · AI"
-tech: ["TypeScript", "MCP Protocol", "MSAL", "Microsoft Graph API", "Dataverse Web API"]
+kicker: "AI · Automation"
+tech: ["AI Builder", "TypeScript", "MCP Protocol", "MSAL", "Microsoft Graph API", "Dataverse Web API"]
 featured: false
 order: 6
 ---
 
-Built a set of custom Model Context Protocol (MCP) servers that connect AI coding assistants to the Microsoft enterprise stack. Instead of manually looking up schema definitions, checking SharePoint for documents, or navigating the Power Automate designer, the AI assistant can query these systems directly through structured tool calls.
+Two halves of the same discipline: AI features running in production business workflows, and AI tooling that accelerates how the platform itself gets built. Every production AI feature ships with three properties — structured output parsed deterministically, explicit error handling for malformed responses, and a human review gate before anything becomes a record.
 
-### Servers
+### Production document AI
 
-- **Dataverse MCP** — query tables, describe schema, create/update/delete records, run search. The AI can inspect live table structure before writing service code, eliminating schema guesswork
-- **SharePoint MCP** — list libraries and folders, search files, get file metadata. Useful for understanding document organization and finding reference files
-- **Teams MCP** — find teams by project ID, list channels and members. Enables the AI to understand team structure when building notification flows
-- **Power Automate MCP** — list, read, create, update, toggle, and delete cloud flows. The AI can inspect existing automation and create new flows through the API rather than the visual designer
+- **Insurance certificate extraction** — ACORD 25 certificates of insurance are processed by an AI Builder GPT flow using an ~80-line prompt that returns strict JSON (carrier, general-liability limits, effective/expiration dates, endorsement flags). Output goes through Parse JSON with run-after error handling for malformed responses, then supersession logic deactivates the prior certificate so only the current one is active. A parallel flow does W-9 extraction
+- **AI daily-log summarization with a clarification loop** — the model drafts the field narrative from structured data, returns clarification questions when input is ambiguous, and the foreman approves before anything is finalized
+- **Spanish→English T&M ticket translation** pipeline, live in production since July 2026
+- **Prompts managed as versioned configuration** — model updates publish via the Dataverse Web API (`UnpublishAIConfiguration` → `PublishAIConfiguration`), so flows referencing the model by ID need no changes on republish
 
-### Authentication pattern
+### Custom MCP servers
 
-Each server uses MSAL (Microsoft Authentication Library) with device code flow for initial setup, then caches tokens locally. The servers are configured via the repo's `.mcp.json` so they activate automatically when a developer opens the project — no per-session setup after the initial auth.
+A set of Model Context Protocol servers connect AI coding assistants to the enterprise stack, so the assistant queries live systems instead of guessing:
 
-### Impact on development
+- **Dataverse MCP** — query tables, describe schema, create/update records, run search. The AI inspects live table structure before writing service code, eliminating schema guesswork
+- **SharePoint MCP** — list libraries and folders, search files, get metadata
+- **Teams MCP** — find teams by project ID, list channels and members
+- **Power Automate MCP** — list, read, create, update, and toggle cloud flows through the API rather than the visual designer
 
-The biggest win is schema accuracy. Before the Dataverse MCP server, writing service code meant guessing at column names and types, then fixing errors after deployment. Now the AI reads the live schema before writing a single line, and the code is correct on the first push.
+Each server authenticates with MSAL device-code flow and caches tokens locally, configured via the repo's `.mcp.json` so they activate automatically when a developer opens the project.

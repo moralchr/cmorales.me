@@ -2,11 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import ComingSoon from '../components/ComingSoon.astro';
 import '../styles/global.css';
-
-// Soft-launch gate: flip to false to open the site (also drops noindex).
-const GATED = true;
 
 interface Props {
   title: string;
@@ -25,7 +21,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    {GATED && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonicalUrl} />
 
     <meta property="og:type" content="website" />
@@ -36,7 +31,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
@@ -50,7 +45,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
         const stored = localStorage.getItem('theme');
         const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
         root.classList.toggle('dark', dark);
-        if (localStorage.getItem('site-unlocked') === '1') root.classList.add('unlocked');
       })();
 
       // ClientRouter swaps <html>, so re-apply on every navigation.
@@ -64,7 +58,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
-    {GATED && <ComingSoon />}
     <Header />
     <main>
       <slot />

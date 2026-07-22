@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pdf = '/resume/Christopher-Morales-Resume.pdf';
+---
+
+<BaseLayout title="Resume" description="Resume of Chris Morales — business systems developer in Orlando, FL.">
+  <section class="pt-28 pb-16 px-6">
+    <div class="max-w-[900px] mx-auto">
+      <div class="flex flex-wrap items-baseline justify-between gap-4">
+        <h1 class="text-3xl sm:text-4xl">Resume</h1>
+        <a
+          href={pdf}
+          download="Christopher-Morales-Resume.pdf"
+          class="arrow-link text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+        >
+          Download PDF <span class="arrow">↓</span>
+        </a>
+      </div>
+
+      <div class="mt-8 border border-rule rounded-lg overflow-hidden">
+        <object
+          data={pdf}
+          type="application/pdf"
+          class="w-full h-[80vh] block"
+          aria-label="Christopher Morales resume PDF"
+        >
+          <div class="p-10 text-center bg-paper-alt">
+            <p class="text-ink-muted text-sm">
+              Your browser can't display the PDF inline.
+            </p>
+            <a
+              href={pdf}
+              class="link-underline inline-block mt-3 text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+            >
+              Open the resume instead
+            </a>
+          </div>
+        </object>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
