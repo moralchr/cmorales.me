@@ -37,8 +37,8 @@
   --c-paper: #0f1419;
   --c-paper-alt: #161d24;
   --c-ink: #e2e8f0;
-  --c-ink-muted: #94a3b8;
-  --c-ink-faint: #5a6472;
+  --c-ink-muted: #b3bfcc;
+  --c-ink-faint: #77828f;
   --c-accent: #6aa8d4;
   --c-accent-hover: #8dbde0;
   --c-accent-subtle: #1c2a38;
@@ -325,6 +325,66 @@ html:not(.js) .slide-nav {
   cursor: default;
 }
 
+/* ── Photo preview dialog ──────────────────────────────────── */
+
+#photo-viewer {
+  margin: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  max-width: min(94vw, 1000px);
+  max-height: 90vh;
+  overflow: visible;
+}
+
+#photo-viewer[open] {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#photo-viewer img {
+  display: block;
+  max-width: min(80vw, 820px);
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* Counter + arrows sit on the dark backdrop regardless of theme. */
+#photo-viewer .pv-counter {
+  color: #cbd5e1;
+}
+
+#photo-viewer .slide-arrow {
+  background: transparent;
+  border-color: #47566a;
+  color: #cbd5e1;
+}
+
+#photo-viewer .slide-arrow:hover {
+  border-color: #cbd5e1;
+  color: #ffffff;
+}
+
+#photo-viewer::backdrop {
+  background: rgb(10 14 20 / 0.75);
+  backdrop-filter: blur(4px);
+}
+
+/* Hide the About me collage on short viewports so the screen
+   still fits without scrolling. */
+@media (max-height: 760px) {
+  .about-photos {
+    display: none;
+  }
+}
+
+/* Background master–detail panel swap. */
+.bg-detail.is-in {
+  animation: fade-up 0.45s var(--ease-out-expo) both;
+}
+
 /* ── Disclosure (details/summary) ──────────────────────────── */
 
 details.disclosure summary {
@@ -334,37 +394,6 @@ details.disclosure summary {
 
 details.disclosure summary::-webkit-details-marker {
   display: none;
-}
-
-.disc-icon {
-  position: relative;
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
-
-.disc-icon::before,
-.disc-icon::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  background: currentColor;
-  transition: transform 0.35s var(--ease-out-expo);
-}
-
-.disc-icon::before {
-  width: 14px;
-  height: 1.5px;
-}
-
-.disc-icon::after {
-  width: 1.5px;
-  height: 14px;
-}
-
-details[open] .disc-icon::after {
-  transform: rotate(90deg);
 }
 
 details[open] .disclosure-body {
@@ -419,6 +448,10 @@ details[open] .disclosure-body {
   }
 
   details[open] .disclosure-body {
+    animation: none;
+  }
+
+  .bg-detail.is-in {
     animation: none;
   }
 

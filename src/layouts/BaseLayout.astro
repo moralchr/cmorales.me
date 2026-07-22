@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { title, description = 'Chris Morales — business systems developer in Orlando, FL.' } = Astro.props;
-const pageTitle = title === 'Home' ? 'Chris Morales' : `${title} — Chris Morales`;
+const pageTitle = title === 'Home' ? 'Chris Morales | Systems Developer' : `${title} — Chris Morales`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const onResume = Astro.url.pathname.startsWith('/resume');
 // The deck's intro screen carries its own Resume link + theme toggle,
@@ -22,6 +22,7 @@ const showCorner = Astro.url.pathname !== '/';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
 
     <meta property="og:type" content="website" />
