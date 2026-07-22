@@ -325,6 +325,52 @@ html:not(.js) .slide-nav {
   cursor: default;
 }
 
+/* ── Disclosure (details/summary) ──────────────────────────── */
+
+details.disclosure summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details.disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.disc-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.disc-icon::before,
+.disc-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: currentColor;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.disc-icon::before {
+  width: 14px;
+  height: 1.5px;
+}
+
+.disc-icon::after {
+  width: 1.5px;
+  height: 14px;
+}
+
+details[open] .disc-icon::after {
+  transform: rotate(90deg);
+}
+
+details[open] .disclosure-body {
+  animation: fade-up 0.4s var(--ease-out-expo) both;
+}
+
 /* Photo placeholder frame. */
 .photo-frame {
   aspect-ratio: 16 / 10;
@@ -370,6 +416,10 @@ html:not(.js) .slide-nav {
   .deck,
   .slides {
     transition: none;
+  }
+
+  details[open] .disclosure-body {
+    animation: none;
   }
 
   ::view-transition-old(root),

@@ -10,6 +10,9 @@ const { title, description = 'Chris Morales — business systems developer in Or
 const pageTitle = title === 'Home' ? 'Chris Morales' : `${title} — Chris Morales`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const onResume = Astro.url.pathname.startsWith('/resume');
+// The deck's intro screen carries its own Resume link + theme toggle,
+// so the home page gets no corner controls at all.
+const showCorner = Astro.url.pathname !== '/';
 ---
 
 <!doctype html>
@@ -45,7 +48,9 @@ const onResume = Astro.url.pathname.startsWith('/resume');
     </script>
   </head>
   <body>
-    <!-- No header bar: just quiet fixed corner controls. -->
+    <!-- No header bar: just quiet fixed corner controls (not on home —
+         the intro screen has its own). -->
+    {showCorner && (
     <div class="fixed top-5 right-6 z-50 flex items-center gap-6">
       <a
         href={onResume ? '/' : '/resume'}
@@ -54,7 +59,7 @@ const onResume = Astro.url.pathname.startsWith('/resume');
         {onResume ? 'Home' : 'Resume'}
       </a>
       <button
-        id="theme-toggle"
+        data-theme-toggle
         type="button"
         aria-label="Toggle dark mode"
         class="text-ink-muted hover:text-ink transition-colors cursor-pointer"
@@ -68,6 +73,7 @@ const onResume = Astro.url.pathname.startsWith('/resume');
         </svg>
       </button>
     </div>
+    )}
 
     <main>
       <slot />
@@ -81,7 +87,7 @@ const onResume = Astro.url.pathname.startsWith('/resume');
         localStorage.setItem('theme', dark ? 'dark' : 'light');
       };
       document.addEventListener('click', e => {
-        if (!(e.target as HTMLElement).closest('#theme-toggle')) return;
+        if (!(e.target as HTMLElement).closest('[data-theme-toggle]')) return;
         if (document.startViewTransition) document.startViewTransition(applyTheme);
         else applyTheme();
       });

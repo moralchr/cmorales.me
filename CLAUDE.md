@@ -4,7 +4,7 @@
 
 Chris Morales's personal site — a viewport-locked "deck" in the style of gagev.dev: the page never scrolls vertically; wheel/swipe/keys snap between full-screen sections, and projects slide horizontally within their section. Plus a /resume page embedding the PDF. Deployed to Cloudflare Pages at `https://cmorales.me`. Public — no gate, no noindex.
 
-**No header bar** — Chris rejected it as clashing with the design. The only chrome is a fixed top-right corner cluster (Resume/Home link + theme toggle) rendered by BaseLayout, plus the deck's own dots and slide arrows.
+**No header bar** — Chris rejected it as clashing with the design. On the home page there is NO fixed chrome at all: the intro screen's link row carries Email · LinkedIn · Resume · theme toggle (he asked for the controls there, in a consistent font, not alone at the top). Other pages (/resume, 404) get a fixed top-right corner cluster (Home link + toggle) from BaseLayout. Theme toggles are `[data-theme-toggle]` buttons; the shared handler lives in BaseLayout.
 
 ## Tech Stack
 
@@ -39,7 +39,7 @@ cmorales.me/
 
 ## The Deck
 
-Three screens in `index.astro`: `#intro` (name, one-liner, tools pills, Email/LinkedIn links), `#projects` (horizontal slides, one project each), `#background` (career timeline + certs + ©). Contact info lives on the intro screen — don't add a screen that repeats it. All deck behavior is one inline `<script>` in `index.astro`:
+Three screens in `index.astro`: `#intro` (name, one-liner, tools pills, Email/LinkedIn/Resume/toggle row), `#projects` (horizontal slides, one project each), `#background` (expandable career timeline + "About me" disclosure + certs + ©). Contact info lives on the intro screen — don't add a screen that repeats it. The background rows are an **accordion** (opening one closes the others) so the screen height stays bounded — keep that invariant. All deck behavior is one inline `<script>` in `index.astro`:
 
 - Wheel accumulates deltas (threshold 30) with a 700ms lock so trackpad inertia doesn't skip screens; touch swipes (horizontal = slides when on projects, vertical = screens); arrow keys/PageUp/PageDown/Home/End
 - Inside the projects screen, the gesture advances slides until they run out, then the deck moves to the next screen (gagev.dev behavior)

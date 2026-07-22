@@ -17,9 +17,38 @@ const screens = [
 ];
 
 const background = [
-  { period: '2025 —', place: 'Annapurna Construction', role: 'Software / Systems Developer' },
-  { period: '2021 — 2025', place: 'KPMG US', role: 'Senior PMO Analyst' },
-  { period: '2017 — 2021', place: 'Westgate Resorts', role: 'Operational analytics & reporting' },
+  {
+    period: '2025 —',
+    place: 'Annapurna Construction',
+    role: 'Software / Systems Developer',
+    bullets: [
+      'Dataverse schema migration of 39K+ records across legacy and new tables',
+      'QuickBooks Online, QuickBooks Time, and DocuSign integrations',
+      'Two internal workspace apps built with React, TypeScript, and Power Apps Code Apps',
+      'GitHub monorepo architecture with shared components and CI',
+      'Role-based access control across Entra groups, Dataverse roles, and app permissions',
+    ],
+  },
+  {
+    period: '2021 — 2025',
+    place: 'KPMG US',
+    role: 'Senior PMO Analyst',
+    bullets: [
+      'Managed $15M+ in budgets for state government accounts',
+      'Automated Excel reporting with Alteryx, saving hundreds of hours of manual effort',
+      '$239K+ in cost savings through resource optimization',
+      'Facilitated cross-functional project meetings and trained junior staff',
+    ],
+  },
+  {
+    period: '2017 — 2021',
+    place: 'Westgate Resorts',
+    role: 'Administrative Assistant',
+    bullets: [
+      'Operational analytics with Excel, SQL, and Tableau',
+      'Streamlined reporting, documentation, and training programs',
+    ],
+  },
 ];
 ---
 
@@ -44,9 +73,24 @@ const background = [
           <div class="hero-fade mt-6 flex flex-wrap gap-2 max-w-[560px]" style="--d: 0.55s">
             {tools.map(t => <span class="pill">{t}</span>)}
           </div>
-          <div class="hero-fade mt-8 flex flex-wrap gap-7" style="--d: 0.65s">
+          <div class="hero-fade mt-8 flex flex-wrap items-center gap-7" style="--d: 0.65s">
             <a href="mailto:chrismorales5112@gmail.com" class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors">Email</a>
             <a href="https://www.linkedin.com/in/cmorales88/" target="_blank" rel="noopener noreferrer" class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors">LinkedIn</a>
+            <a href="/resume" class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors">Resume</a>
+            <button
+              data-theme-toggle
+              type="button"
+              aria-label="Toggle dark mode"
+              class="text-ink-muted hover:text-ink transition-colors cursor-pointer"
+            >
+              <svg class="dark:hidden" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.5" />
+                <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" />
+              </svg>
+              <svg class="hidden dark:block" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" />
+              </svg>
+            </button>
           </div>
         </div>
       </section>
@@ -100,26 +144,58 @@ const background = [
         </div>
       </section>
 
-      <!-- Screen 3: background -->
+      <!-- Screen 3: background (accordion — one entry open at a time
+           so the screen never overflows) -->
       <section class="deck-screen" id="background">
         <div class="w-full max-w-[1100px] mx-auto px-6">
           <span class="label">Background</span>
-          <div class="mt-8 max-w-[720px]">
+          <div class="mt-6 max-w-[720px]" id="background-list">
             {background.map(b => (
-              <div class="grid sm:grid-cols-[150px_1fr] gap-x-8 gap-y-1 py-5 border-b border-rule">
-                <span class="font-mono text-xs text-ink-faint pt-1">{b.period}</span>
-                <div>
-                  <h2 class="text-lg sm:text-xl">{b.place}</h2>
-                  <p class="mt-1 text-sm text-ink-muted">{b.role}</p>
+              <details class="disclosure group border-b border-rule">
+                <summary class="grid sm:grid-cols-[150px_1fr_auto] gap-x-8 gap-y-1 py-4 items-start">
+                  <span class="font-mono text-xs text-ink-faint pt-1.5">{b.period}</span>
+                  <div>
+                    <h2 class="text-lg sm:text-xl group-hover:text-accent transition-colors">{b.place}</h2>
+                    <p class="mt-0.5 text-sm text-ink-muted">{b.role}</p>
+                  </div>
+                  <span class="disc-icon mt-2 text-ink-muted hidden sm:block"></span>
+                </summary>
+                <div class="disclosure-body pb-5 sm:pl-[calc(150px+2rem)]">
+                  <ul class="space-y-1.5">
+                    {b.bullets.map(item => (
+                      <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
+                        <span class="text-accent shrink-0 mt-0.5">—</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+              </details>
             ))}
+
+            <details class="disclosure group border-b border-rule">
+              <summary class="grid sm:grid-cols-[150px_1fr_auto] gap-x-8 gap-y-1 py-4 items-start">
+                <span class="font-mono text-xs text-ink-faint pt-1.5"></span>
+                <h2 class="text-lg sm:text-xl group-hover:text-accent transition-colors">About me</h2>
+                <span class="disc-icon mt-2 text-ink-muted hidden sm:block"></span>
+              </summary>
+              <div class="disclosure-body pb-5 sm:pl-[calc(150px+2rem)]">
+                <!-- TODO(chris): add anything personal you want here —
+                     hobbies, interests, what you're into outside work. -->
+                <p class="text-ink-muted text-sm leading-relaxed max-w-[480px]">
+                  I came to software from operations, not a CS degree. At KPMG
+                  I started automating my own reporting work, and building
+                  tools became the job. Based in Orlando.
+                </p>
+              </div>
+            </details>
           </div>
-          <p class="mt-8 text-sm text-ink-muted">
+
+          <p class="mt-6 text-sm text-ink-muted">
             Microsoft Certified: Power Platform Developer (PL-400) ·
             A.A. Information Technology, Valencia College
           </p>
-          <p class="mt-12 text-ink-faint text-xs">&copy; {new Date().getFullYear()} Chris Morales</p>
+          <p class="mt-10 text-ink-faint text-xs">&copy; {new Date().getFullYear()} Chris Morales</p>
         </div>
       </section>
     </div>
@@ -221,7 +297,7 @@ const background = [
 
     // Keyboard (skip when focus is on an interactive element).
     window.addEventListener('keydown', e => {
-      if ((e.target as HTMLElement).closest('button, a, input, textarea, select')) return;
+      if ((e.target as HTMLElement).closest('button, a, input, textarea, select, summary')) return;
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); advance(1); }
       else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); advance(-1); }
       else if (e.key === 'ArrowRight' && screenIdx === projectsIdx) goSlide(slideIdx + 1);
@@ -246,6 +322,17 @@ const background = [
         goScreen(projectsIdx);
       }
     }
+
+    // Background accordion: one entry open at a time, so the screen
+    // height stays bounded (the deck never scrolls vertically).
+    const bgList = document.getElementById('background-list')!;
+    bgList.addEventListener('toggle', e => {
+      const opened = e.target as HTMLDetailsElement;
+      if (!opened.open) return;
+      bgList.querySelectorAll<HTMLDetailsElement>('details[open]').forEach(d => {
+        if (d !== opened) d.open = false;
+      });
+    }, true);
 
     if (location.hash) jumpToHash(location.hash);
     render();
