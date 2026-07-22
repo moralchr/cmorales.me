@@ -4,7 +4,11 @@ description: "A declarative system for managing Dataverse security roles from ve
 date: 2026-04-01
 kicker: "Infrastructure · Security"
 tech: ["TypeScript", "Dataverse Web API", "MSAL", "Node.js", "Entra ID"]
-featured: false
+highlights:
+  - "Security roles defined as JSON files in git"
+  - "Dry-run diff against live Dataverse, then apply"
+  - "Role changes get review and history like any other code"
+  - "Delete privilege excluded by default: soft-delete retention policy"
 order: 7
 ---
 

@@ -1,8 +1,6 @@
 ---
 const pathname = Astro.url.pathname;
 const links = [
-  { href: '/#skills', label: 'Skills' },
-  { href: '/#experience', label: 'Experience' },
   { href: '/#projects', label: 'Projects' },
   { href: '/#contact', label: 'Contact' },
   { href: '/resume', label: 'Resume' },
@@ -11,7 +9,7 @@ const isActive = (href: string) => !href.includes('#') && pathname.startsWith(hr
 ---
 
 <header class="site-header fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-sm">
-  <nav class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+  <nav class="max-w-[1100px] mx-auto px-6 h-16 flex items-center justify-between">
     <a href="/" class="font-semibold tracking-tight text-lg text-ink hover:text-ink">
       <span class="hidden sm:inline">Chris Morales</span>
       <span class="sm:hidden">CM</span>
@@ -24,9 +22,6 @@ const isActive = (href: string) => !href.includes('#') && pathname.startsWith(hr
           class:list={[
             'link-underline label transition-colors',
             isActive(link.href) ? 'text-ink' : 'hover:text-ink',
-            // Anchor sections are reachable only from home — hide the
-            // crowd on small screens, keep Resume always visible.
-            link.href.includes('#') && 'hidden sm:inline',
           ]}
         >
           {link.label}
@@ -51,31 +46,10 @@ const isActive = (href: string) => !href.includes('#') && pathname.startsWith(hr
 </header>
 
 <script>
-  // Attached once; survives ClientRouter swaps by querying the header lazily.
   document.addEventListener('click', e => {
     if ((e.target as HTMLElement).closest('#theme-toggle')) {
       const dark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('theme', dark ? 'dark' : 'light');
     }
-  });
-
-  let lastY = window.scrollY;
-  const onScroll = () => {
-    const header = document.querySelector<HTMLElement>('.site-header');
-    if (!header) return;
-    const y = window.scrollY;
-    header.classList.toggle('scrolled', y > 24);
-    // Hide when scrolling down past the hero, reveal on any scroll up.
-    if (y > 400 && y > lastY) {
-      header.classList.add('hidden-up');
-    } else {
-      header.classList.remove('hidden-up');
-    }
-    lastY = y;
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('astro:page-load', () => {
-    lastY = window.scrollY;
-    onScroll();
   });
 </script>

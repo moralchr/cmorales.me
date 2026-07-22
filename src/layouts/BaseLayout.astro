@@ -1,7 +1,5 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -9,7 +7,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'Chris Morales — Business systems developer building internal tools and integrations for construction.' } = Astro.props;
+const { title, description = 'Chris Morales — business systems developer in Orlando, FL.' } = Astro.props;
 const pageTitle = title === 'Home' ? 'Chris Morales' : `${title} — Chris Morales`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -35,8 +33,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
       rel="stylesheet"
     />
 
-    <ClientRouter />
-
     <script is:inline>
       // Theme + JS detection, before first paint to avoid flash.
       (function () {
@@ -46,15 +42,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
         const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
         root.classList.toggle('dark', dark);
       })();
-
-      // ClientRouter swaps <html>, so re-apply on every navigation.
-      document.addEventListener('astro:after-swap', () => {
-        const root = document.documentElement;
-        root.classList.add('js');
-        const stored = localStorage.getItem('theme');
-        const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-        root.classList.toggle('dark', dark);
-      });
     </script>
   </head>
   <body>
@@ -62,38 +49,5 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <main>
       <slot />
     </main>
-    <Footer />
-
-    <script>
-      function initReveals() {
-        const elements = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.revealed)');
-        if (!('IntersectionObserver' in window)) {
-          elements.forEach(el => el.classList.add('revealed'));
-          return;
-        }
-        const observer = new IntersectionObserver(
-          entries => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                observer.unobserve(entry.target);
-              }
-            }
-          },
-          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-        );
-        elements.forEach(el => {
-          // Stagger siblings that share a parent.
-          const siblings = el.parentElement
-            ? Array.from(el.parentElement.children).filter(c => c.hasAttribute('data-reveal'))
-            : [el];
-          const index = siblings.indexOf(el);
-          if (index > 0) el.style.setProperty('--reveal-delay', `${Math.min(index * 0.08, 0.4)}s`);
-          observer.observe(el);
-        });
-      }
-
-      document.addEventListener('astro:page-load', initReveals);
-    </script>
   </body>
 </html>

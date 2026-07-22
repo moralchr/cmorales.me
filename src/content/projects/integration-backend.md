@@ -4,7 +4,11 @@ description: "An Azure Functions layer (~25 functions) keeping QuickBooks, DocuS
 date: 2025-12-01
 kicker: "Azure · Integrations"
 tech: ["TypeScript", "Azure Functions", "Bicep", "Key Vault", "Service Bus", "QuickBooks API", "DocuSign API", "SharePoint"]
-featured: false
+highlights:
+  - "~25 Azure Functions syncing QuickBooks, DocuSign, QuickBooks Time, and Kojo"
+  - "Idempotent writers, drift detection, audit trail on every mutation"
+  - "SharePoint folders, Teams team, and channels provisioned by automation"
+  - "Infrastructure as code with Bicep; Key Vault, Service Bus, OpenTelemetry"
 order: 4
 ---
 

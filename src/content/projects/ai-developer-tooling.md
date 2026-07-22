@@ -4,7 +4,11 @@ description: "Production AI features — document extraction, summarization, tra
 date: 2026-05-01
 kicker: "AI · Automation"
 tech: ["AI Builder", "TypeScript", "MCP Protocol", "MSAL", "Microsoft Graph API", "Dataverse Web API"]
-featured: false
+highlights:
+  - "Insurance certificate and W-9 data extraction with strict JSON output"
+  - "Spanish to English T&M ticket translation in production"
+  - "Every AI output passes a human review gate before it becomes a record"
+  - "MCP servers for Dataverse, SharePoint, Teams, and Power Automate"
 order: 6
 ---
 

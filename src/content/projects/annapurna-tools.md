@@ -4,7 +4,11 @@ description: "A monorepo of React/TypeScript apps on Microsoft Power Platform â€
 date: 2025-01-01
 kicker: "Power Platform Â· Architecture"
 tech: ["React 19", "TypeScript", "Vite", "Power Platform", "Dataverse", "Vitest", "GitHub Actions"]
-featured: true
+highlights:
+  - "Monorepo of React SPAs deployed to Power Platform as Code Apps"
+  - "Shared package: offline queue, timeout wrappers, Dataverse type coercion"
+  - "CI gate runs typecheck, tests, and build on every change; merge on green"
+  - "39K+ record schema migration across legacy and new tables"
 order: 1
 ---
 

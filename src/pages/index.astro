@@ -1,383 +1,248 @@
 ---
-import fs from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects'))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 
-// Drop a photo at public/images/profile.jpg and it appears automatically.
-const hasProfilePhoto = fs.existsSync(new URL('../../public/images/profile.jpg', import.meta.url));
-
-const skills = [
-  {
-    group: 'Microsoft stack',
-    items: [
-      'Power Automate', 'Power Apps Code Apps', 'Dataverse', 'Power BI', 'Power Query',
-      'SharePoint Online', 'Microsoft Teams', 'AI Builder', 'Entra ID', 'Microsoft Graph', 'MSAL',
-    ],
-  },
-  {
-    group: 'Engineering',
-    items: [
-      'TypeScript', 'React 19', 'Node.js', 'Vite', 'Vitest', 'Playwright',
-      'Git / GitHub', 'GitHub Actions CI/CD', 'Astro',
-    ],
-  },
-  {
-    group: 'Integrations',
-    items: [
-      'QuickBooks Online', 'QuickBooks Time', 'DocuSign', 'CloudEvents', 'Webhooks', 'REST / OData',
-    ],
-  },
-  {
-    group: 'AI tooling',
-    items: [
-      'AI Builder GPT prompts', 'Document extraction', 'AI summarization & translation',
-      'MCP servers', 'AI-assisted development',
-    ],
-  },
-  {
-    group: 'Practices',
-    items: [
-      'Decision records', 'Runbooks & postmortems', 'RBAC-as-code', 'Structured pilots',
-      'Parallel-run cutovers', 'Backlog management', 'User training & SOPs',
-    ],
-  },
+const tools = [
+  'TypeScript', 'React', 'Node.js', 'Power Platform', 'Dataverse',
+  'Power Automate', 'Power BI', 'Azure', 'QuickBooks', 'DocuSign', 'AI Builder',
 ];
 
-const experience = [
-  {
-    company: 'Annapurna Construction',
-    role: 'Software/Systems Developer',
-    period: 'Oct 2025 — Present',
-    summary:
-      'Building the internal platform for a commercial construction company — project management and field apps, accounting integrations, and the data architecture underneath.',
-    bullets: [
-      'Led a Dataverse schema migration of 39K+ records across legacy and new tables — resolving duplicate data and scaling limits while preserving every relationship',
-      'Integrated QuickBooks Online, QuickBooks Time, and DocuSign to eliminate duplicate entry and create a single financial source of truth',
-      'Co-built two internal workspace applications with React, TypeScript, and Power Apps Code Apps, modernizing office-to-field workflows',
-      'Implemented the GitHub-based monorepo architecture: shared components, CI quality gates, documentation and governance standards',
-      'Designed role-based access control spanning Entra security groups, MDM, Dataverse security roles, and app-level permissions',
-    ],
-  },
-  {
-    company: 'KPMG US',
-    role: 'Senior PMO Analyst',
-    period: 'Jan 2021 — Oct 2025',
-    summary:
-      'Program financials and reporting automation for state-government consulting engagements.',
-    bullets: [
-      'Managed $15M+ in engagement budgets under margin pressure, contract ceilings, and compliance requirements',
-      'Automated month-end reporting pipelines with Alteryx, saving hundreds of hours of manual PMO effort',
-      'Delivered $239K+ in cost savings through resource optimization across engagements',
-      'Facilitated cross-functional project meetings and trained junior staff',
-    ],
-  },
-  {
-    company: 'Westgate Resorts',
-    role: 'Administrative Assistant',
-    period: 'Aug 2017 — Jan 2021',
-    summary: 'Operational analytics and reporting for resort operations.',
-    bullets: [
-      'Produced operational analytics with Excel, SQL, and Tableau to improve productivity and leadership visibility',
-      'Streamlined reporting processes and strengthened documentation and training programs',
-    ],
-  },
+const screens = [
+  { id: 'intro', name: 'Intro' },
+  { id: 'projects', name: 'Projects' },
+  { id: 'contact', name: 'Contact' },
 ];
 ---
 
 <BaseLayout title="Home">
-  <!-- Hero + About, merged -->
-  <section id="top" class="relative pt-36 pb-20 px-6 overflow-hidden">
-    <div class="hero-glow top-[-20%] right-[-15%]"></div>
-    <div class="max-w-[1200px] mx-auto relative">
-      <div class="grid md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-start">
-        <div class="max-w-[640px]">
-          <p class="hero-fade label flex items-center gap-2.5" style="--d: 0.05s">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-            </span>
-            Open to opportunities · Orlando, FL
-          </p>
-          <h1 class="mt-6 text-[clamp(2.75rem,6vw,4.5rem)] leading-[1.02] tracking-tight">
+  <div class="deck-viewport">
+    <div class="deck" id="deck">
+      <!-- Screen 1: intro -->
+      <section class="deck-screen" id="intro">
+        <div class="hero-glow top-[-20%] right-[-15%]"></div>
+        <div class="w-full max-w-[1100px] mx-auto px-6 relative">
+          <p class="hero-fade label" style="--d: 0.05s">Orlando, FL</p>
+          <h1 class="mt-4 text-[clamp(2.75rem,7vw,5.5rem)] leading-[1.02] tracking-tight">
             <span class="hero-mask"><span class="hero-line" style="--d: 0.15s">Chris Morales</span></span>
           </h1>
-          <p class="hero-fade mt-3 text-xl text-accent font-medium" style="--d: 0.3s">
+          <p class="hero-fade mt-3 text-lg sm:text-xl text-accent font-medium" style="--d: 0.3s">
             Business Systems Developer
           </p>
-
-          <div class="hero-fade mt-8 space-y-5 text-ink-muted leading-relaxed" style="--d: 0.45s">
-            <p>
-              I build the software that runs a commercial construction company —
-              the project management platform in the office, the field apps on
-              jobsite iPads, and the integrations that keep accounting,
-              contracts, and payroll in sync.
-            </p>
-            <p>
-              Construction doesn't forgive flaky software. Superintendents work
-              from spotty jobsite connections, billing has to reconcile to the
-              penny against QuickBooks, and a contract can't go out with the
-              wrong scope attached. So I spend my time on offline-resilient
-              write queues, idempotent accounting syncs, and document pipelines —
-              React and TypeScript on Microsoft's Power Platform.
-            </p>
-            <p>
-              I got here through operations, not a CS degree: operational
-              analytics at Westgate Resorts, then program finances as a Senior
-              PMO Analyst at KPMG — where automating my own reporting
-              bottlenecks taught me that the highest-leverage code removes work
-              someone dreads doing. I'm a Microsoft Certified Power Platform
-              Developer (PL-400).
-            </p>
-          </div>
-
-          <div class="hero-fade mt-8 flex flex-wrap gap-7" style="--d: 0.6s">
-            <a
-              href="mailto:chrismorales5112@gmail.com"
-              class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
-            >
-              Email
-            </a>
-            <a
-              href="https://www.linkedin.com/in/cmorales88/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="/resume"
-              class="link-underline text-sm font-medium text-ink-muted hover:text-ink transition-colors"
-            >
-              Resume
-            </a>
-          </div>
-        </div>
-
-        <div class="hero-fade md:order-last order-first mx-auto md:mx-0" style="--d: 0.35s">
-          {hasProfilePhoto ? (
-            <img
-              src="/images/profile.jpg"
-              alt="Chris Morales"
-              width="280"
-              height="336"
-              class="w-[220px] md:w-[280px] aspect-[5/6] object-cover rounded-2xl border border-rule"
-            />
-          ) : (
-            <div class="w-[220px] md:w-[280px] aspect-[5/6] rounded-2xl bg-paper-alt border border-rule flex items-center justify-center">
-              <span class="font-mono text-xs tracking-[0.15em] uppercase text-ink-faint">Photo</span>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Skills / software inventory -->
-  <section id="skills" class="px-6 pb-20 scroll-mt-24">
-    <div class="max-w-[1200px] mx-auto">
-      <div class="section-head" data-reveal>
-        <h2 class="label text-ink">Skills</h2>
-        <span class="label">Software inventory</span>
-      </div>
-      <div class="mt-8 space-y-8">
-        {skills.map(s => (
-          <div class="grid sm:grid-cols-[180px_1fr] gap-x-8 gap-y-2" data-reveal>
-            <p class="text-sm font-medium text-ink pt-1">{s.group}</p>
-            <div class="flex flex-wrap gap-2">
-              {s.items.map(item => (
-                <span class="pill">{item}</span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Experience -->
-  <section id="experience" class="px-6 pb-20 scroll-mt-24">
-    <div class="max-w-[1200px] mx-auto">
-      <div class="section-head" data-reveal>
-        <h2 class="label text-ink">Experience</h2>
-        <span class="label">2017 —</span>
-      </div>
-
-      <div>
-        {experience.map(job => (
-          <div class="py-8 border-b border-rule" data-reveal>
-            <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-              <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
-                <h3 class="text-lg font-medium tracking-tight">{job.company}</h3>
-                <span class="text-sm text-accent">{job.role}</span>
-              </div>
-              <span class="font-mono text-xs text-ink-faint shrink-0">{job.period}</span>
-            </div>
-            <p class="mt-2 text-sm text-ink-muted max-w-[720px]">{job.summary}</p>
-            <ul class="mt-4 space-y-2.5 max-w-[720px]">
-              {job.bullets.map(b => (
-                <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
-                  <span class="text-accent shrink-0 mt-0.5">—</span>
-                  {b}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <div class="mt-8 grid sm:grid-cols-[180px_1fr] gap-x-8 gap-y-2" data-reveal>
-        <p class="label pt-1">Certifications &amp; Education</p>
-        <div class="space-y-1.5 text-sm text-ink-muted">
-          <p>
-            <span class="text-ink font-medium">Microsoft Certified: Power Platform Developer Associate (PL-400)</span>
+          <p class="hero-fade mt-6 max-w-[520px] text-ink-muted leading-relaxed" style="--d: 0.45s">
+            I build internal software for a commercial construction company:
+            office apps, field tools, and the integrations between them.
           </p>
-          <p>A.A. in Information Technology — Valencia College, 2020</p>
+          <div class="hero-fade mt-6 flex flex-wrap gap-2 max-w-[560px]" style="--d: 0.55s">
+            {tools.map(t => <span class="pill">{t}</span>)}
+          </div>
+          <div class="hero-fade mt-8 flex flex-wrap gap-7" style="--d: 0.65s">
+            <a href="mailto:chrismorales5112@gmail.com" class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors">Email</a>
+            <a href="https://www.linkedin.com/in/cmorales88/" target="_blank" rel="noopener noreferrer" class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors">LinkedIn</a>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- Projects, expanded -->
-  <section id="projects" class="px-6 pb-20 scroll-mt-24">
-    <div class="max-w-[1200px] mx-auto">
-      <div class="section-head" data-reveal>
-        <h2 class="label text-ink">Projects</h2>
-        <span class="label">{String(projects.length).padStart(2, '0')}</span>
-      </div>
-      <p class="mt-6 text-ink-muted text-sm max-w-[560px]" data-reveal>
-        Internal software for a construction business — most of it lives in a
-        private monorepo, so it's described rather than linked.
-      </p>
-
-      <div class="mt-4">
-        {await Promise.all(projects.map(async (project, i) => {
-          const { Content } = await render(project);
-          const images = project.data.images;
-          return (
-            <article
-              id={project.id}
-              class:list={['py-12 scroll-mt-24', i > 0 && 'border-t border-rule']}
-              data-reveal
-            >
-              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                <h3 class="text-xl sm:text-2xl">{project.data.title}</h3>
-                <span class="text-ink-faint text-sm font-mono shrink-0">
-                  {project.data.date.getUTCFullYear()}–
-                </span>
-              </div>
-              {project.data.kicker && (
-                <span class="label text-accent text-[0.65rem]">{project.data.kicker}</span>
-              )}
-              <p class="mt-2 text-ink-muted text-sm max-w-[640px]">
-                {project.data.description}
-              </p>
-
-              {project.data.tech && (
-                <div class="flex flex-wrap gap-2 mt-5">
-                  {project.data.tech.map(t => (
-                    <span class="pill">{t}</span>
-                  ))}
-                </div>
-              )}
-
-              <div class="prose text-sm mt-6">
-                <Content />
-              </div>
-
-              {images === undefined ? (
-                <div class="mt-8">
-                  <span class="label">In pictures</span>
-                  <div class="gallery mt-3 max-w-[720px]">
-                    <div class="photo-frame"><span>Photo coming soon</span></div>
-                    <div class="photo-frame"><span>Photo coming soon</span></div>
-                  </div>
-                </div>
-              ) : images.length > 0 ? (
-                <div class="mt-8">
-                  <span class="label">In pictures</span>
-                  <div class="gallery mt-3 max-w-[720px]">
-                    {images.map(img => (
-                      <figure>
-                        <img src={img.src} alt={img.alt} loading="lazy" />
-                        {img.caption && (
-                          <figcaption class="mt-2 text-xs font-mono text-ink-faint">{img.caption}</figcaption>
-                        )}
-                      </figure>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
-              {(project.data.url || project.data.github) && (
-                <div class="flex gap-4 mt-8">
-                  {project.data.url && (
-                    <a
-                      href={project.data.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
-                    >
-                      Visit <span class="arrow">→</span>
-                    </a>
+      <!-- Screen 2: projects (horizontal slides) -->
+      <section class="deck-screen" id="projects">
+        <div class="slides" id="slides">
+          {projects.map(project => (
+            <article class="slide" id={project.id}>
+              <div class="w-full max-w-[1100px] mx-auto grid md:grid-cols-[1.1fr_1fr] gap-8 md:gap-12 items-center">
+                <div class="min-w-0">
+                  {project.data.kicker && (
+                    <span class="label text-accent text-[0.65rem]">{project.data.kicker}</span>
                   )}
-                  {project.data.github && (
-                    <a
-                      href={project.data.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="arrow-link text-sm text-accent hover:text-accent-hover transition-colors"
-                    >
-                      Source <span class="arrow">→</span>
-                    </a>
+                  <h2 class="mt-2 text-[clamp(1.5rem,3.5vw,2.5rem)]">{project.data.title}</h2>
+                  <p class="mt-3 text-sm sm:text-base text-ink-muted leading-relaxed">
+                    {project.data.description}
+                  </p>
+                  {project.data.highlights && (
+                    <ul class="mt-5 space-y-2">
+                      {project.data.highlights.map(h => (
+                        <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
+                          <span class="text-accent shrink-0 mt-0.5">—</span>
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {project.data.tech && (
+                    <div class="mt-5 flex flex-wrap gap-2">
+                      {project.data.tech.map(t => <span class="pill">{t}</span>)}
+                    </div>
                   )}
                 </div>
-              )}
+                <div class="slide-media hidden md:block">
+                  {project.data.images && project.data.images.length > 0 ? (
+                    <img src={project.data.images[0].src} alt={project.data.images[0].alt} loading="lazy" />
+                  ) : (
+                    <div class="photo-frame"><span>Photo coming soon</span></div>
+                  )}
+                </div>
+              </div>
             </article>
-          );
-        }))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="px-6 pb-8 scroll-mt-24">
-    <div class="max-w-[1200px] mx-auto">
-      <div class="section-head" data-reveal>
-        <h2 class="label text-ink">Contact</h2>
-      </div>
-      <div class="mt-8 max-w-[640px]" data-reveal>
-        <p class="text-ink-muted leading-relaxed">
-          The fastest way to reach me is email. I'm open to conversations about
-          internal tools, integrations, and operations software.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-7">
-          <a
-            href="mailto:chrismorales5112@gmail.com"
-            class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
-          >
-            chrismorales5112@gmail.com
-          </a>
-          <a
-            href="https://www.linkedin.com/in/cmorales88/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="link-underline text-sm font-medium text-accent hover:text-accent-hover transition-colors"
-          >
-            linkedin.com/in/cmorales88
-          </a>
-          <a
-            href="/resume/Christopher-Morales-Resume.pdf"
-            class="link-underline text-sm font-medium text-ink-muted hover:text-ink transition-colors"
-            download
-          >
-            Download resume
-          </a>
+          ))}
         </div>
-      </div>
+
+        <div class="slide-nav">
+          <button type="button" class="slide-arrow" id="slide-prev" aria-label="Previous project">←</button>
+          <span class="label" id="slide-counter">01 / {String(projects.length).padStart(2, '0')}</span>
+          <button type="button" class="slide-arrow" id="slide-next" aria-label="Next project">→</button>
+        </div>
+      </section>
+
+      <!-- Screen 3: contact -->
+      <section class="deck-screen" id="contact">
+        <div class="w-full max-w-[1100px] mx-auto px-6">
+          <span class="label">Contact</span>
+          <div class="mt-6 flex flex-col gap-3">
+            <a href="mailto:chrismorales5112@gmail.com" class="text-[clamp(1.4rem,3.5vw,2.5rem)] font-semibold tracking-tight hover:text-accent transition-colors">
+              chrismorales5112@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/cmorales88/" target="_blank" rel="noopener noreferrer" class="text-lg text-ink-muted hover:text-accent transition-colors">
+              linkedin.com/in/cmorales88
+            </a>
+          </div>
+          <p class="mt-14 text-ink-faint text-xs">&copy; {new Date().getFullYear()} Chris Morales</p>
+        </div>
+      </section>
     </div>
-  </section>
+
+    <nav class="deck-dots" aria-label="Sections">
+      {screens.map((s, i) => (
+        <button type="button" class="deck-dot" data-goto={i} aria-label={s.name} aria-current={i === 0 ? 'true' : undefined}></button>
+      ))}
+    </nav>
+  </div>
+
+  <script>
+    const deck = document.getElementById('deck')!;
+    const screens = Array.from(deck.querySelectorAll<HTMLElement>('.deck-screen'));
+    const slidesEl = document.getElementById('slides')!;
+    const slideCount = slidesEl.children.length;
+    const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('.deck-dot'));
+    const counter = document.getElementById('slide-counter')!;
+    const prevBtn = document.getElementById('slide-prev') as HTMLButtonElement;
+    const nextBtn = document.getElementById('slide-next') as HTMLButtonElement;
+    const projectsIdx = screens.findIndex(s => s.id === 'projects');
+
+    let screenIdx = 0;
+    let slideIdx = 0;
+
+    function render() {
+      deck.style.transform = `translateY(-${screenIdx * 100}%)`;
+      slidesEl.style.transform = `translateX(-${slideIdx * 100}%)`;
+      dots.forEach((d, i) =>
+        i === screenIdx ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')
+      );
+      counter.textContent = `${String(slideIdx + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}`;
+      prevBtn.disabled = slideIdx === 0;
+      nextBtn.disabled = slideIdx === slideCount - 1;
+      const hash = screenIdx === 0 ? '' : `#${screens[screenIdx].id}`;
+      history.replaceState(null, '', hash || location.pathname);
+    }
+
+    function goScreen(next: number) {
+      screenIdx = Math.min(Math.max(next, 0), screens.length - 1);
+      render();
+    }
+
+    function goSlide(next: number) {
+      slideIdx = Math.min(Math.max(next, 0), slideCount - 1);
+      render();
+    }
+
+    // Advance: inside the projects screen, horizontal slides consume
+    // the gesture until they run out, then the deck moves on.
+    function advance(dir: 1 | -1) {
+      if (screenIdx === projectsIdx) {
+        if (dir > 0 && slideIdx < slideCount - 1) return goSlide(slideIdx + 1);
+        if (dir < 0 && slideIdx > 0) return goSlide(slideIdx - 1);
+      }
+      goScreen(screenIdx + dir);
+    }
+
+    // Wheel: accumulate small deltas, lock during the transition so
+    // trackpad inertia doesn't skip screens.
+    let acc = 0;
+    let locked = false;
+    window.addEventListener(
+      'wheel',
+      e => {
+        e.preventDefault();
+        if (locked) return;
+        acc += e.deltaY;
+        if (Math.abs(acc) < 30) return;
+        const dir = acc > 0 ? 1 : -1;
+        acc = 0;
+        locked = true;
+        advance(dir);
+        setTimeout(() => (locked = false), 700);
+      },
+      { passive: false }
+    );
+
+    // Touch: horizontal swipe moves slides on the projects screen,
+    // vertical swipe moves screens.
+    let tx = 0, ty = 0;
+    window.addEventListener('touchstart', e => {
+      tx = e.touches[0].clientX;
+      ty = e.touches[0].clientY;
+    }, { passive: true });
+    window.addEventListener('touchmove', e => {
+      if (e.touches.length === 1) e.preventDefault(); // keep pinch-zoom working
+    }, { passive: false });
+    window.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      const dy = e.changedTouches[0].clientY - ty;
+      if (Math.abs(dx) < 50 && Math.abs(dy) < 50) return;
+      if (screenIdx === projectsIdx && Math.abs(dx) > Math.abs(dy)) {
+        goSlide(slideIdx + (dx < 0 ? 1 : -1));
+      } else {
+        advance(dy < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+
+    // Keyboard (skip when focus is on an interactive element).
+    window.addEventListener('keydown', e => {
+      if ((e.target as HTMLElement).closest('button, a, input, textarea, select')) return;
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); advance(1); }
+      else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); advance(-1); }
+      else if (e.key === 'ArrowRight' && screenIdx === projectsIdx) goSlide(slideIdx + 1);
+      else if (e.key === 'ArrowLeft' && screenIdx === projectsIdx) goSlide(slideIdx - 1);
+      else if (e.key === 'Home') goScreen(0);
+      else if (e.key === 'End') goScreen(screens.length - 1);
+    });
+
+    prevBtn.addEventListener('click', () => goSlide(slideIdx - 1));
+    nextBtn.addEventListener('click', () => goSlide(slideIdx + 1));
+    dots.forEach(d => d.addEventListener('click', () => goScreen(Number(d.dataset.goto))));
+
+    // Header nav + deep links: /#projects, /#contact, /#<project-id>.
+    function jumpToHash(hash: string) {
+      const id = decodeURIComponent(hash.replace('#', ''));
+      if (!id) return goScreen(0);
+      const screenTarget = screens.findIndex(s => s.id === id);
+      if (screenTarget >= 0) return goScreen(screenTarget);
+      const slideTarget = Array.from(slidesEl.children).findIndex(el => el.id === id);
+      if (slideTarget >= 0) {
+        slideIdx = slideTarget;
+        goScreen(projectsIdx);
+      }
+    }
+
+    document.addEventListener('click', e => {
+      const a = (e.target as HTMLElement).closest('a[href^="/#"], a[href="/"]');
+      if (!a) return;
+      const href = a.getAttribute('href')!;
+      e.preventDefault();
+      jumpToHash(href === '/' ? '' : href.slice(1));
+    });
+
+    if (location.hash) jumpToHash(location.hash);
+    render();
+  </script>
 </BaseLayout>

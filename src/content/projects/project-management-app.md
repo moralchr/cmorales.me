@@ -4,7 +4,11 @@ description: "Unified PM tool for tracking contracts, budgets, change orders, T&
 date: 2025-06-01
 kicker: "Power Platform · Office"
 tech: ["React", "TypeScript", "Power Platform", "Dataverse", "DocuSign", "Power BI"]
-featured: true
+highlights:
+  - "Contracts, budgets, change orders, and T&M tickets in one app"
+  - "Word contracts generated client-side; DocuSign signing tracked in five stages"
+  - "Issuance blocked until MSA, W-9, and insurance are current"
+  - "Billing cycle-time KPI with amber/red thresholds"
 order: 3
 ---
 

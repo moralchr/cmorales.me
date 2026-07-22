@@ -4,7 +4,11 @@ description: "A tablet-first app for field supervisors — crew management, dail
 date: 2025-03-01
 kicker: "Power Platform · Field"
 tech: ["React", "TypeScript", "CSS Modules", "Dataverse", "Power Automate", "AI Builder", "SharePoint"]
-featured: true
+highlights:
+  - "Offline-first: write queue with retry, timeout-wrapped SDK calls"
+  - "Daily manpower entry cut from ~65 taps to 3–8"
+  - "AI drafts the daily log narrative; the foreman reviews and approves"
+  - "SVG Gantt schedule; photo pipeline into SharePoint by job and date"
 order: 2
 ---
 

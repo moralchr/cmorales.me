@@ -2,83 +2,90 @@
 
 ## What This Is
 
-Chris Morales's personal website — a single-page portfolio (layout modeled on gagev.dev) focused on his software inventory and project work, plus a resume tab. Deployed to Cloudflare Pages at `https://cmorales.me`. Site is public — no gate, no noindex.
+Chris Morales's personal site — a viewport-locked "deck" in the style of gagev.dev: the page never scrolls vertically; wheel/swipe/keys snap between full-screen sections, and projects slide horizontally within their section. Plus a /resume page embedding the PDF. Deployed to Cloudflare Pages at `https://cmorales.me`. Public — no gate, no noindex.
 
 ## Tech Stack
 
-- **Framework:** Astro 6 (static output, no SSR)
+- **Framework:** Astro 6 (static output, no SSR, no ClientRouter — plain page loads)
 - **Styling:** Tailwind CSS v4 via Vite plugin
 - **Deployment:** Cloudflare Pages (GitHub → auto-deploy on push to `main`)
 - **Content:** Astro content collections (Markdown in `src/content/`)
 - **TypeScript:** Strict mode
-
-No Cloudflare adapter needed — static files deploy natively to Cloudflare Pages.
 
 ## Structure
 
 ```
 cmorales.me/
 ├── src/
-│   ├── components/         # Astro components (Header, Footer)
-│   ├── layouts/            # Page layouts (Base, Post)
-│   ├── pages/              # File-based routing
-│   │   ├── index.astro     # THE page — hero+about, skills, experience, projects, contact
-│   │   ├── resume.astro    # Embedded PDF viewer + download link
-│   │   ├── writing/        # Blog index + [slug] routes (kept, but out of the nav)
+│   ├── components/Header.astro   # Fixed nav: Projects, Contact, Resume, theme toggle
+│   ├── layouts/BaseLayout.astro  # Head, fonts, no-flash theme script
+│   ├── pages/
+│   │   ├── index.astro           # The deck: intro / projects slider / contact + all deck JS
+│   │   ├── resume.astro          # PDF embed + download
 │   │   └── 404.astro
-│   ├── content/            # Content collection source files
-│   │   ├── writing/        # Blog posts (Markdown, all drafts)
-│   │   └── projects/       # Project case studies (Markdown)
-│   ├── content.config.ts   # Collection schemas (Zod)
-│   └── styles/
-│       └── global.css      # Tailwind theme + typography + utilities
+│   ├── content/
+│   │   ├── projects/             # 7 project files (frontmatter drives the slides)
+│   │   └── writing/              # Draft posts kept for the future — NO routes render them
+│   ├── content.config.ts         # Zod schemas
+│   └── styles/global.css         # Tokens, pill/label utilities, deck styles
 ├── public/
-│   ├── images/projects/    # Project gallery photos
-│   └── resume/             # Christopher-Morales-Resume.pdf (deployed copy)
-├── docs/                   # GITIGNORED — handoffs, daily notes, and reference/
-│   └── reference/          # Private source docs (interview prep, resume PDF original)
-├── astro.config.mjs        # includes redirects for old /about and /projects routes
-├── tsconfig.json
-└── package.json
+│   ├── images/projects/          # Slide photos
+│   └── resume/                   # Christopher-Morales-Resume.pdf (deployed copy)
+├── docs/                         # GITIGNORED — handoffs, daily notes, reference/
+│   └── reference/                # Private: interview-prep doc, original resume PDF
+└── astro.config.mjs              # redirects: /about → /, /projects → /#projects
 ```
+
+## The Deck
+
+Three screens in `index.astro`: `#intro` (name, one-liner, tools pills, links), `#projects` (horizontal slides, one project each), `#contact` (email, LinkedIn, ©). All deck behavior is one inline `<script>` in `index.astro`:
+
+- Wheel accumulates deltas (threshold 30) with a 700ms lock so trackpad inertia doesn't skip screens; touch swipes (horizontal = slides when on projects, vertical = screens); arrow keys/PageUp/PageDown/Home/End
+- Inside the projects screen, the gesture advances slides until they run out, then the deck moves to the next screen (gagev.dev behavior)
+- `history.replaceState` keeps the hash in sync; `/#projects`, `/#contact`, and `/#<project-id>` deep links jump on load; header anchor clicks are intercepted on the home page
+- Screen dots (fixed right), slide counter + arrow buttons (bottom center)
+- CSS: `html.js body:has(.deck-viewport) { overflow: hidden }`, screens move via `translateY`, slides via `translateX`. **No-JS fallback:** without `html.js` the sections stack and scroll normally
+- `prefers-reduced-motion` kills the transitions (navigation becomes instant)
+- Content must FIT each screen — Chris explicitly wants zero vertical scrolling. If content grows, shrink it (fewer bullets, smaller type). `.slide-media` hides below 620px viewport height
 
 ## Design System
 
-Single-page portfolio in the style of gagev.dev, re-themed: white paper, cool blue accents, clean bold sans headings, mono pill tags. Sections stack vertically on the home page; the top nav is anchor links plus a Resume tab.
+White paper + cool steel-blue accent; near-black cool dark variant behind the header toggle (class `.dark`, no-flash inline script in BaseLayout, localStorage + `prefers-color-scheme` fallback). All colors are `--c-*` vars in `global.css` mapped through `@theme`.
 
-### Fonts
-- **Headings + body:** Archivo (variable). Base h1–h3 rule sets weight 650 — headings are bold sans (Instrument Serif was removed in the 2026-07 redesign; `--font-serif` now aliases Archivo)
-- **Mono:** IBM Plex Mono (labels, dates, pills, code)
+- `paper` #ffffff / #0f1419 · `ink` #0f172a / #e2e8f0 · `accent` #1a5c8a / #6aa8d4 · `rule` #e2e8f0 / #243040
+- **Fonts:** Archivo everything (h1–h3 weight 650); IBM Plex Mono for `label` and `pill` utilities. No serif.
+- Utilities: `label` (mono uppercase), `pill` (mono tag chip), `.link-underline`, `.hero-*` intro entrance, `.photo-frame`, deck classes (`.deck-*`, `.slides`, `.slide-*`)
 
-### Colors
-Light and dark themes, both defined as CSS custom properties in `global.css` (`:root` = light, `.dark` = dark). Tailwind `@theme` tokens reference these vars, so utilities respond to the theme class at runtime.
-- `paper` (#ffffff / #0f1419) — white / cool near-black background; `paper-alt` (#f4f7fa / #161d24)
-- `ink` (#0f172a / #e2e8f0) — slate text
-- `ink-muted` / `ink-faint` — secondary/tertiary text (slate grays)
-- `accent` (#1a5c8a / #6aa8d4) — steel blue for links, highlights, pills
-- `rule` (#e2e8f0 / #243040) — dividers
+### Copy rules (important)
+- **Bare facts only.** Chris flagged earlier copy as sounding AI-written. No hook lines, no rule-of-three flourishes, no "X doesn't forgive Y" constructions. Short factual statements.
+- **No job-seeker signals.** No "open to opportunities" badges or recruiting framing. It's a personal site that happens to have a resume page.
+- No template ornament (grain, cursors, marquees, section numbering). No forced-casual slang ("gnarly" was vetoed).
+- Don't write blog posts for him. Drafts in `src/content/writing/` stay drafts; no routes render them.
 
-Theme toggle lives in the Header; a no-flash inline script in `BaseLayout` applies `.dark` before paint (localStorage, falls back to `prefers-color-scheme`).
+## Content Collections
 
-### Key utilities
-- `label` — mono uppercase annotation (section heads, kickers)
-- `pill` — mono tag chip (`bg-accent-subtle`, hairline border, rounded-full); used for skills groups and project tech lists
-- `.link-underline`, `.arrow-link`, `.section-head`, `.gallery`, `.photo-frame` — carried over from the previous design
+### Projects (drives the deck slides)
+```yaml
+---
+title: "Project Name"
+description: "One or two factual sentences."   # shown on the slide
+date: 2025-01-01
+kicker: "Category · Subcategory"
+tech: ["React", "TypeScript"]                  # pills on the slide
+highlights:                                     # 3-4 bare-fact bullets on the slide
+  - "What it does, stated plainly"
+images:                                         # slide shows the FIRST image only
+  - src: "/images/projects/shot.jpg"
+    alt: "Description"
+url: "https://..."                              # optional (not currently rendered)
+order: 1
+---
+Longer markdown body — NOT rendered anywhere right now; kept for a
+possible future detail view.
+```
+Omit `images` → "Photo coming soon" frame renders on the slide.
 
-### Motion system
-- Hero: CSS-only staggered reveal (`.hero-mask`/`.hero-line`) + delayed fades (`.hero-fade`, `--d` custom property); ambient `.hero-glow` radial accent
-- Scroll reveals: add `data-reveal` to any element; an `IntersectionObserver` script in `BaseLayout` fades it up on entry, auto-staggering siblings. Requires `html.js` (set by inline script) so no-JS visitors see content. Don't use `data-reveal` on utility pages like `/resume` — they should render instantly
-- Page transitions: Astro `<ClientRouter />`; scripts re-init on `astro:page-load`, theme re-applies on `astro:after-swap`
-- Header hides on scroll-down, reveals on scroll-up
-- Everything respects `prefers-reduced-motion`
-
-### Principles
-- One page, top to bottom: who Chris is (hero + about merged — he doesn't want many tabs), what he works with (pill inventory), where he's worked, what he's built, how to reach him
-- Projects render fully expanded with bold metric bullets — no disclosures, no clicks to see the work
-- No template ornament: no grain overlay, custom cursors, magnetic hovers, marquees, or "(01)" section numbering — these read as AI-generated and were deliberately removed
-- Motion is quiet and eased (`--ease-out-expo`), never blocking
-- Copy stays professional — no forced-casual words (Chris vetoed "gnarly")
-- Footer is conventional on purpose — professional personal sites end quietly
+**Profile photo:** not currently in the layout (intro screen is text-only).
 
 ## Commands
 
@@ -88,72 +95,15 @@ npm run build     # Production build to dist/
 npm run preview   # Preview build locally
 ```
 
-## Content Collections
+Headless screenshot tip: `msedge --headless --screenshot=... --virtual-time-budget=4000 --force-prefers-reduced-motion <url>` gives settled deck states; widths below ~500px get clamped by Edge's minimum window size (not a layout bug).
 
-### Writing (blog posts)
-Create `src/content/writing/<slug>.md` with frontmatter:
-```yaml
----
-title: "Post Title"
-description: "One-line summary."
-date: 2026-07-06
-tags: ["tag1", "tag2"]
-draft: false
----
-```
+## GitHub / Deployment
 
-### Projects
-Create `src/content/projects/<slug>.md` with frontmatter:
-```yaml
----
-title: "Project Name"
-description: "What it does and why."
-date: 2025-01-01
-kicker: "Category · Subcategory"
-tech: ["React", "TypeScript"]
-url: "https://..."
-github: "https://github.com/..."
-featured: true
-order: 1
----
-```
-
-All projects render expanded in the home page **Projects** section (sorted by `order`), each `<article>` carrying `id={slug}` so `/#slug` deep-links work (old `/projects#slug` links redirect). Project bodies are markdown with bold-metric bullets sourced from Chris's documented work — the private source doc lives in `docs/reference/bank-ops-interview-prep.html` (gitignored). Verify figures against their sources before changing them; the site is public.
-
-**Project photos:** drop files in `public/images/projects/`, then list them in the project's frontmatter:
-```yaml
-images:
-  - src: "/images/projects/field-app-gantt.jpg"
-    alt: "Gantt schedule view on iPad"
-    caption: "Schedule view in the field app"   # optional
-```
-Omit `images` entirely → placeholder frames render ("Photo coming soon"). Set `images: []` → no gallery section at all.
-
-**Profile photo:** drop `public/images/profile.jpg` and the hero picks it up automatically (build-time `fs.existsSync` check in `index.astro`); until then a placeholder frame renders.
-
-## Page structure
-
-- Home (`/`) = hero (status dot, name, title, about paragraphs, photo slot, Email/LinkedIn/Resume links) → `#skills` (pill clusters: Microsoft stack, Engineering, Integrations, AI tooling, Practices) → `#experience` (flat entries with resume bullets + certs/education) → `#projects` (all projects expanded) → `#contact`
-- Resume (`/resume`) = `<object>` PDF embed of `public/resume/Christopher-Morales-Resume.pdf` with download link and non-PDF-browser fallback
-- Nav = `/#skills`, `/#experience`, `/#projects`, `/#contact`, `/resume` (anchor links hidden on mobile widths; Resume always visible)
-- Redirects (astro.config): `/about` → `/`, `/projects` → `/#projects`
-- Writing pages exist but are out of the nav; posts are all `draft: true` — Chris does not want generated articles published; he'll write his own. Drafts are excluded from routes, lists, and the sitemap
-- Footer (all pages) = conventional: name, role/location, short availability line, email + LinkedIn links, copyright
-
-## GitHub
-
-Personal account: `moralchr`. This repo is separate from the Annapurna org.
-
-## Deployment
-
-Cloudflare Pages connected to the `moralchr/cmorales.me` GitHub repo.
-- Build command: `npm run build`
-- Output directory: `dist`
-- Branch: `main`
+Personal account `moralchr` (separate from the Annapurna org). Cloudflare Pages builds `npm run build` → `dist` on push to `main`.
 
 ## Notes Convention
 
-Same pattern as annapurna-website (all under gitignored `docs/`):
+All under gitignored `docs/`:
 - `docs/handoffs/chris/YYYY-MM-DD-HHmm.md` — session handoffs
 - `docs/daily/chris/YYYY-MM-DD.md` — end-of-day summaries
-- `docs/reference/` — private reference material (interview prep doc, original resume PDF)
+- `docs/reference/` — private reference material
