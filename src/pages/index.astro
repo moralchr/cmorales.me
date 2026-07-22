@@ -13,7 +13,13 @@ const tools = [
 const screens = [
   { id: 'intro', name: 'Intro' },
   { id: 'projects', name: 'Projects' },
-  { id: 'contact', name: 'Contact' },
+  { id: 'background', name: 'Background' },
+];
+
+const background = [
+  { period: '2025 —', place: 'Annapurna Construction', role: 'Software / Systems Developer' },
+  { period: '2021 — 2025', place: 'KPMG US', role: 'Senior PMO Analyst' },
+  { period: '2017 — 2021', place: 'Westgate Resorts', role: 'Operational analytics & reporting' },
 ];
 ---
 
@@ -94,19 +100,26 @@ const screens = [
         </div>
       </section>
 
-      <!-- Screen 3: contact -->
-      <section class="deck-screen" id="contact">
+      <!-- Screen 3: background -->
+      <section class="deck-screen" id="background">
         <div class="w-full max-w-[1100px] mx-auto px-6">
-          <span class="label">Contact</span>
-          <div class="mt-6 flex flex-col gap-3">
-            <a href="mailto:chrismorales5112@gmail.com" class="text-[clamp(1.4rem,3.5vw,2.5rem)] font-semibold tracking-tight hover:text-accent transition-colors">
-              chrismorales5112@gmail.com
-            </a>
-            <a href="https://www.linkedin.com/in/cmorales88/" target="_blank" rel="noopener noreferrer" class="text-lg text-ink-muted hover:text-accent transition-colors">
-              linkedin.com/in/cmorales88
-            </a>
+          <span class="label">Background</span>
+          <div class="mt-8 max-w-[720px]">
+            {background.map(b => (
+              <div class="grid sm:grid-cols-[150px_1fr] gap-x-8 gap-y-1 py-5 border-b border-rule">
+                <span class="font-mono text-xs text-ink-faint pt-1">{b.period}</span>
+                <div>
+                  <h2 class="text-lg sm:text-xl">{b.place}</h2>
+                  <p class="mt-1 text-sm text-ink-muted">{b.role}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <p class="mt-14 text-ink-faint text-xs">&copy; {new Date().getFullYear()} Chris Morales</p>
+          <p class="mt-8 text-sm text-ink-muted">
+            Microsoft Certified: Power Platform Developer (PL-400) ·
+            A.A. Information Technology, Valencia College
+          </p>
+          <p class="mt-12 text-ink-faint text-xs">&copy; {new Date().getFullYear()} Chris Morales</p>
         </div>
       </section>
     </div>
@@ -221,7 +234,7 @@ const screens = [
     nextBtn.addEventListener('click', () => goSlide(slideIdx + 1));
     dots.forEach(d => d.addEventListener('click', () => goScreen(Number(d.dataset.goto))));
 
-    // Header nav + deep links: /#projects, /#contact, /#<project-id>.
+    // Deep links: /#projects, /#background, /#<project-id>.
     function jumpToHash(hash: string) {
       const id = decodeURIComponent(hash.replace('#', ''));
       if (!id) return goScreen(0);
@@ -233,14 +246,6 @@ const screens = [
         goScreen(projectsIdx);
       }
     }
-
-    document.addEventListener('click', e => {
-      const a = (e.target as HTMLElement).closest('a[href^="/#"], a[href="/"]');
-      if (!a) return;
-      const href = a.getAttribute('href')!;
-      e.preventDefault();
-      jumpToHash(href === '/' ? '' : href.slice(1));
-    });
 
     if (location.hash) jumpToHash(location.hash);
     render();

@@ -1,5 +1,4 @@
 ---
-import Header from '../components/Header.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -10,6 +9,7 @@ interface Props {
 const { title, description = 'Chris Morales — business systems developer in Orlando, FL.' } = Astro.props;
 const pageTitle = title === 'Home' ? 'Chris Morales' : `${title} — Chris Morales`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const onResume = Astro.url.pathname.startsWith('/resume');
 ---
 
 <!doctype html>
@@ -45,9 +45,46 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
-    <Header />
+    <!-- No header bar: just quiet fixed corner controls. -->
+    <div class="fixed top-5 right-6 z-50 flex items-center gap-6">
+      <a
+        href={onResume ? '/' : '/resume'}
+        class="link-underline label hover:text-ink transition-colors"
+      >
+        {onResume ? 'Home' : 'Resume'}
+      </a>
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label="Toggle dark mode"
+        class="text-ink-muted hover:text-ink transition-colors cursor-pointer"
+      >
+        <svg class="dark:hidden" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.5" />
+          <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" />
+        </svg>
+        <svg class="hidden dark:block" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" />
+        </svg>
+      </button>
+    </div>
+
     <main>
       <slot />
     </main>
+
+    <script>
+      // Theme switch as a view-transition crossfade where supported,
+      // instant otherwise.
+      const applyTheme = () => {
+        const dark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      };
+      document.addEventListener('click', e => {
+        if (!(e.target as HTMLElement).closest('#theme-toggle')) return;
+        if (document.startViewTransition) document.startViewTransition(applyTheme);
+        else applyTheme();
+      });
+    </script>
   </body>
 </html>

@@ -4,6 +4,8 @@
 
 Chris Morales's personal site — a viewport-locked "deck" in the style of gagev.dev: the page never scrolls vertically; wheel/swipe/keys snap between full-screen sections, and projects slide horizontally within their section. Plus a /resume page embedding the PDF. Deployed to Cloudflare Pages at `https://cmorales.me`. Public — no gate, no noindex.
 
+**No header bar** — Chris rejected it as clashing with the design. The only chrome is a fixed top-right corner cluster (Resume/Home link + theme toggle) rendered by BaseLayout, plus the deck's own dots and slide arrows.
+
 ## Tech Stack
 
 - **Framework:** Astro 6 (static output, no SSR, no ClientRouter — plain page loads)
@@ -17,10 +19,9 @@ Chris Morales's personal site — a viewport-locked "deck" in the style of gagev
 ```
 cmorales.me/
 ├── src/
-│   ├── components/Header.astro   # Fixed nav: Projects, Contact, Resume, theme toggle
-│   ├── layouts/BaseLayout.astro  # Head, fonts, no-flash theme script
+│   ├── layouts/BaseLayout.astro  # Head, fonts, no-flash theme script, corner controls
 │   ├── pages/
-│   │   ├── index.astro           # The deck: intro / projects slider / contact + all deck JS
+│   │   ├── index.astro           # The deck: intro / projects slider / background + all deck JS
 │   │   ├── resume.astro          # PDF embed + download
 │   │   └── 404.astro
 │   ├── content/
@@ -38,11 +39,11 @@ cmorales.me/
 
 ## The Deck
 
-Three screens in `index.astro`: `#intro` (name, one-liner, tools pills, links), `#projects` (horizontal slides, one project each), `#contact` (email, LinkedIn, ©). All deck behavior is one inline `<script>` in `index.astro`:
+Three screens in `index.astro`: `#intro` (name, one-liner, tools pills, Email/LinkedIn links), `#projects` (horizontal slides, one project each), `#background` (career timeline + certs + ©). Contact info lives on the intro screen — don't add a screen that repeats it. All deck behavior is one inline `<script>` in `index.astro`:
 
 - Wheel accumulates deltas (threshold 30) with a 700ms lock so trackpad inertia doesn't skip screens; touch swipes (horizontal = slides when on projects, vertical = screens); arrow keys/PageUp/PageDown/Home/End
 - Inside the projects screen, the gesture advances slides until they run out, then the deck moves to the next screen (gagev.dev behavior)
-- `history.replaceState` keeps the hash in sync; `/#projects`, `/#contact`, and `/#<project-id>` deep links jump on load; header anchor clicks are intercepted on the home page
+- `history.replaceState` keeps the hash in sync; `/#projects`, `/#background`, and `/#<project-id>` deep links jump on load
 - Screen dots (fixed right), slide counter + arrow buttons (bottom center)
 - CSS: `html.js body:has(.deck-viewport) { overflow: hidden }`, screens move via `translateY`, slides via `translateX`. **No-JS fallback:** without `html.js` the sections stack and scroll normally
 - `prefers-reduced-motion` kills the transitions (navigation becomes instant)
@@ -50,7 +51,7 @@ Three screens in `index.astro`: `#intro` (name, one-liner, tools pills, links), 
 
 ## Design System
 
-White paper + cool steel-blue accent; near-black cool dark variant behind the header toggle (class `.dark`, no-flash inline script in BaseLayout, localStorage + `prefers-color-scheme` fallback). All colors are `--c-*` vars in `global.css` mapped through `@theme`.
+White paper + cool steel-blue accent; near-black cool dark variant behind the corner toggle (class `.dark`, no-flash inline script in BaseLayout, localStorage + `prefers-color-scheme` fallback). **Theme switches run through `document.startViewTransition`** so the whole page crossfades instead of cutting — keep that wrapper if the toggle handler moves. All colors are `--c-*` vars in `global.css` mapped through `@theme`.
 
 - `paper` #ffffff / #0f1419 · `ink` #0f172a / #e2e8f0 · `accent` #1a5c8a / #6aa8d4 · `rule` #e2e8f0 / #243040
 - **Fonts:** Archivo everything (h1–h3 weight 650); IBM Plex Mono for `label` and `pill` utilities. No serif.

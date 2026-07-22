@@ -56,9 +56,11 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html,
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* Theme switches crossfade via the View Transitions API (see
+   BaseLayout); a slightly longer fade reads smoother than the default. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
 }
 
 @layer base {
@@ -213,7 +215,7 @@ html.js .deck-viewport {
   position: relative;
   height: 100%;
   overflow: hidden;
-  padding-top: 4rem; /* fixed header */
+  padding-top: 3.5rem; /* clearance for the corner controls */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -356,12 +358,6 @@ html:not(.js) .slide-nav {
   }
 }
 
-/* ── Header ────────────────────────────────────────────────── */
-
-.site-header {
-  border-bottom: 1px solid var(--color-rule);
-}
-
 /* ── Reduced motion ────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -376,8 +372,8 @@ html:not(.js) .slide-nav {
     transition: none;
   }
 
-  html,
-  body {
-    transition: none;
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 }
