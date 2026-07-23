@@ -219,24 +219,37 @@ const background = [
           <div class="mt-4 grid md:grid-cols-[minmax(0,560px)_1fr] gap-x-16 gap-y-8 items-start">
             <div id="bg-list">
               {background.map((b, i) => (
-                <button
-                  type="button"
-                  class="bg-row group block w-full text-left grid sm:grid-cols-[150px_1fr] gap-x-8 gap-y-1 py-5 border-b border-rule cursor-pointer"
-                  data-idx={i}
-                  aria-expanded={i === 0 ? 'true' : 'false'}
-                >
-                  <span class="font-mono text-xs text-ink-faint pt-1">{b.period}</span>
-                  <div>
-                    <h2 class="text-lg sm:text-xl transition-colors group-hover:text-accent group-aria-expanded:text-accent">
-                      {b.place}
-                    </h2>
-                    <p class="mt-1 text-sm text-ink-muted">{b.role}</p>
+                <div class="bg-entry border-b border-rule">
+                  <button
+                    type="button"
+                    class="bg-row group block w-full text-left grid sm:grid-cols-[150px_1fr] gap-x-8 gap-y-1 py-5 cursor-pointer"
+                    data-idx={i}
+                    aria-expanded={i === 0 ? 'true' : 'false'}
+                  >
+                    <span class="font-mono text-xs text-ink-faint pt-1">{b.period}</span>
+                    <div>
+                      <h2 class="text-lg sm:text-xl transition-colors group-hover:text-accent group-aria-expanded:text-accent">
+                        {b.place}
+                      </h2>
+                      <p class="mt-1 text-sm text-ink-muted">{b.role}</p>
+                    </div>
+                  </button>
+                  {/* Mobile-only inline accordion detail (desktop uses the side panel). */}
+                  <div class="bg-inline-detail md:hidden" data-idx={i} hidden={i !== 0}>
+                    <ul class="pb-5 space-y-2">
+                      {b.bullets.map(item => (
+                        <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
+                          <span class="text-accent shrink-0 mt-0.5">·</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
 
-            <div id="bg-panel" class="md:pt-5">
+            <div id="bg-panel" class="hidden md:block md:pt-5">
               {background.map((b, i) => (
                 <div class="bg-detail" data-idx={i} hidden={i !== 0}>
                   <span class="label text-accent">{b.place}</span>
@@ -253,14 +266,14 @@ const background = [
             </div>
           </div>
 
-          <p class="mt-8 text-sm text-ink-muted">
+          <p class="bg-certs mt-6 md:mt-8 text-sm text-ink-muted">
             Microsoft Certified: Power Platform Developer (PL-400) ·
             A.A. Information Technology, Valencia College
           </p>
 
           <!-- Standalone About me: opens downward, styled apart from
                the timeline (mono label + chevron, no hairline row). -->
-          <details class="disclosure group mt-10" id="about">
+          <details class="disclosure group mt-6 md:mt-10" id="about">
             <summary class="inline-flex items-center gap-2.5 py-2">
               <span class="text-base font-medium tracking-tight text-accent group-hover:text-accent-hover transition-colors">About me</span>
               <svg
@@ -473,11 +486,13 @@ const background = [
       }
     }
 
-    // Background master–detail: selecting a row swaps the detail
-    // panel with a short fade. Panel height is bounded, so the
-    // screen never overflows.
+    // Background master–detail: selecting a row swaps the desktop side
+    // panel (with a short fade) and, on mobile, the inline accordion
+    // detail beneath the row. Only one is open at a time, so height stays
+    // bounded on every screen.
     const bgRows = Array.from(document.querySelectorAll<HTMLButtonElement>('.bg-row'));
     const bgDetails = Array.from(document.querySelectorAll<HTMLElement>('.bg-detail'));
+    const bgInline = Array.from(document.querySelectorAll<HTMLElement>('.bg-inline-detail'));
     bgRows.forEach(row => row.addEventListener('click', () => {
       const idx = row.dataset.idx;
       bgRows.forEach(r => r.setAttribute('aria-expanded', String(r === row)));
@@ -490,6 +505,7 @@ const background = [
           d.classList.add('is-in');
         }
       });
+      bgInline.forEach(d => { d.hidden = d.dataset.idx !== idx; });
     }));
 
     // Preview gallery: click an About-me photo or any project image to

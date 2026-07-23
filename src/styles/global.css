@@ -243,10 +243,51 @@ html:not(.js) .deck-screen {
   padding: 1rem 1.5rem 3.5rem;
 }
 
-/* Phones: keep slide text clear of the fixed screen dots on the right. */
+/* Phones: keep slide + background text clear of the fixed screen dots. */
 @media (max-width: 640px) {
   .slide {
     padding-right: 2.75rem;
+  }
+
+  #background > div {
+    padding-right: 2.75rem;
+  }
+
+  /* Background is the one content-dense screen; top-align and tighten it
+     so the accordion (with its tallest entry open) fits short phones. */
+  #background {
+    justify-content: flex-start;
+    padding-top: 1.5rem;
+  }
+
+  #background .bg-row {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  #background .bg-inline-detail ul {
+    padding-bottom: 0.85rem;
+  }
+
+  #background .bg-inline-detail li {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  #background .bg-inline-detail li + li {
+    margin-top: 0.35rem;
+  }
+
+  /* Opening About me on a phone hands the (scroll-locked) screen over to
+     it: the timeline + certs collapse so the photos/bio fit, and About
+     moves up under the heading. Closing it restores the timeline. */
+  #background:has(#about[open]) #bg-list,
+  #background:has(#about[open]) .bg-certs {
+    display: none;
+  }
+
+  #background:has(#about[open]) #about {
+    margin-top: 1.5rem;
   }
 }
 
