@@ -589,6 +589,12 @@ details[open] .disclosure-body {
   opacity: 0.36;
 }
 
+/* Single-pair cyclers have no arrow controls between the stacks, so the
+   before/after figures need a wider gap of their own. */
+.ba-cycler-single {
+  gap: 1.5rem;
+}
+
 .ba-controls {
   display: flex;
   align-items: center;

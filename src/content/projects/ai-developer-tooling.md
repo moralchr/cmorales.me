@@ -3,7 +3,7 @@ title: "AI Tooling & Document Intelligence"
 description: "Production AI features: document extraction, summarization, translation, plus custom MCP servers that give AI coding assistants direct access to the Microsoft enterprise stack."
 date: 2026-05-01
 kicker: "AI · Automation"
-tech: ["AI Builder", "TypeScript", "MCP Protocol", "MSAL", "Microsoft Graph API", "Dataverse Web API"]
+tech: ["AI Builder", "TypeScript", "MCP", "MSAL", "Microsoft Graph API", "Dataverse Web API"]
 highlights:
   - "MCP servers for Dataverse, SharePoint, Teams, and Power Automate"
   - "Insurance certificate and W-9 data extraction with strict JSON output"
@@ -12,7 +12,7 @@ highlights:
 images:
   - src: "/images/projects/mcp-dataverse.webp"
     alt: "Claude Code using the Dataverse MCP to describe a table's live schema"
-order: 6
+order: 7
 ---
 
 Two halves of the same discipline: AI features running in production business workflows, and AI tooling that accelerates how the platform itself gets built. Every production AI feature ships with three properties, structured output parsed deterministically, explicit error handling for malformed responses, and a human review gate before anything becomes a record.

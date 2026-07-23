@@ -3,7 +3,7 @@ title: "Project Management App"
 description: "Internal tool for tracking contracts, budgets, change orders, T&M tickets, and subcontractor relationships across commercial construction projects."
 date: 2025-06-01
 kicker: "Power Platform · Office"
-tech: ["React", "TypeScript", "Power Platform", "Dataverse", "Power Automate", "DocuSign", "Power BI"]
+tech: ["React 19", "TypeScript", "Power Platform", "Dataverse", "Power Automate", "DocuSign", "Power BI"]
 highlights:
   - "Job dashboard clicks through to every contract, COR, and budget record"
   - "Daily logs, crew hours, and T&M tickets flow in from the field app"

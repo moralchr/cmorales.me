@@ -9,12 +9,10 @@ highlights:
   - "Dry-run diff against live Dataverse, then apply"
   - "Role changes get review and history like any other code"
   - "Delete privilege excluded by default: soft-delete retention policy"
-images:
-  - src: "/images/projects/security-roles1.webp"
-    alt: "Dataverse security role privilege matrix across custom tables"
-  - src: "/images/projects/security-roles2.webp"
-    alt: "Security-role reconciler dry-run reporting the role in sync with the JSON spec"
-order: 7
+beforeAfter:
+  - before: { src: "/images/projects/security-roles1.webp", alt: "Dataverse security role privilege matrix across custom tables" }
+    after: { src: "/images/projects/security-roles2.webp", alt: "Security-role reconciler dry-run reporting the role in sync with the JSON spec" }
+order: 6
 ---
 
 Built a reconciler that treats Dataverse security role definitions as code. Role specs live as JSON files in the repo, one per role, with a script that diffs the spec against live Dataverse and applies changes.

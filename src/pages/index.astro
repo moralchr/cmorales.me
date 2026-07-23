@@ -7,7 +7,8 @@ const projects = (await getCollection('projects'))
 
 const tools = [
   'TypeScript', 'React', 'Node.js', 'Power Platform', 'Dataverse',
-  'Power Automate', 'Power BI', 'Azure', 'QuickBooks', 'DocuSign', 'AI Builder',
+  'Power Automate', 'Power BI', 'Azure', 'QuickBooks',
+  'AI Builder', 'MCP',
 ];
 
 const screens = [
@@ -150,7 +151,7 @@ const background = [
                 </div>
                 <div class="slide-media hidden md:block">
                   {project.data.beforeAfter && project.data.beforeAfter.length > 0 ? (
-                    <div class="ba-cycler">
+                    <div class={`ba-cycler${project.data.beforeAfter.length === 1 ? ' ba-cycler-single' : ''}`}>
                       <figure class="ba-item">
                         <span class="label ba-label">Before</span>
                         <div class="ba-stack ba-stack-before">
@@ -159,11 +160,13 @@ const background = [
                           ))}
                         </div>
                       </figure>
-                      <div class="ba-controls" role="group" aria-label="Cycle before and after comparisons">
-                        <button type="button" class="slide-arrow ba-prev" aria-label="Previous comparison">←</button>
-                        <span class="label ba-count">1 / {project.data.beforeAfter.length}</span>
-                        <button type="button" class="slide-arrow ba-next" aria-label="Next comparison">→</button>
-                      </div>
+                      {project.data.beforeAfter.length > 1 && (
+                        <div class="ba-controls" role="group" aria-label="Cycle before and after comparisons">
+                          <button type="button" class="slide-arrow ba-prev" aria-label="Previous comparison">←</button>
+                          <span class="label ba-count">1 / {project.data.beforeAfter.length}</span>
+                          <button type="button" class="slide-arrow ba-next" aria-label="Next comparison">→</button>
+                        </div>
+                      )}
                       <figure class="ba-item">
                         <span class="label ba-label">After</span>
                         <div class="ba-stack ba-stack-after">

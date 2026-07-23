@@ -3,7 +3,7 @@ title: "Integration Backend"
 description: "A TypeScript Azure Functions backend (~25 functions) connecting accounting, signatures, timekeeping, and procurement to the operational platform, built with infrastructure as code, tracing, and contract tests."
 date: 2025-12-01
 kicker: "Azure · Integrations"
-tech: ["TypeScript", "Azure Functions", "Bicep", "Key Vault", "Service Bus", "QuickBooks API", "DocuSign API", "SharePoint"]
+tech: ["TypeScript", "Azure Functions", "Bicep", "Key Vault", "Service Bus", "Application Insights", "QuickBooks API", "DocuSign API", "SharePoint"]
 highlights:
   - "Syncs to QuickBooks Online, DocuSign, QuickBooks Time, and Kojo"
   - "Infrastructure as code with Bicep; secrets in Key Vault, queued work in Service Bus"

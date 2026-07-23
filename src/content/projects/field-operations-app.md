@@ -3,7 +3,7 @@ title: "Field Operations App"
 description: "A tablet-first app for field supervisors: crew management, daily logging, photo uploads, and more, all with offline support."
 date: 2025-03-01
 kicker: "Power Platform · Field"
-tech: ["React", "TypeScript", "CSS Modules", "Dataverse", "Power Automate", "AI Builder", "SharePoint"]
+tech: ["React 19", "TypeScript", "CSS Modules", "Dataverse", "Power Automate", "AI Builder", "SharePoint"]
 highlights:
   - "Offline-first: write queue with retry, timeout-wrapped SDK calls"
   - "Daily manpower entry redesigned down to 10 taps, photos file into SharePoint by job and date"
