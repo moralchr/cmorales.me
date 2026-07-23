@@ -243,9 +243,7 @@ html:not(.js) .deck-screen {
   padding: 1rem 1.5rem 3.5rem;
 }
 
-/* Below md (where the markup itself switches to the inline accordion and
-   hides the side panel): keep slide + background text clear of the fixed
-   screen dots. */
+/* Below md, matching the markup's accordion/side-panel switch. */
 @media (max-width: 767px) {
   .slide {
     padding-right: 2.75rem;
@@ -293,9 +291,7 @@ html:not(.js) .deck-screen {
     margin-top: 1.5rem;
   }
 
-  /* The tall two-column collage doesn't fit a phone with the bio below
-     it: flatten it into a short three-across strip. Taps still open the
-     full-size preview. */
+  /* Collage flattens to a strip; taps still open the preview. */
   .about-photos {
     display: flex;
     gap: 0.5rem;
@@ -309,7 +305,7 @@ html:not(.js) .deck-screen {
   .about-photo {
     flex: 1 1 0;
     min-width: 0;
-    height: 88px;
+    height: 78px;
   }
 
   .about-photo img {
@@ -318,22 +314,39 @@ html:not(.js) .deck-screen {
     object-fit: cover;
   }
 
-  /* Bio text tightens like the timeline bullets do at this width. */
   #about .disclosure-body p {
     font-size: 0.8rem;
     line-height: 1.55;
   }
 
-  /* Single column: at 640-767px the sm: two-column grid squeezes the bio
-     into a strip-narrow column that grows too tall; stack instead. */
   #about .disclosure-body > .grid {
     grid-template-columns: 1fr;
+    row-gap: 0.75rem;
+  }
+
+  /* Off the clock, hidden here by the markup, returns as a wrapped
+     one-liner. */
+  .about-offclock {
+    display: block;
+  }
+
+  .about-offclock ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .about-offclock li {
+    margin-top: 0;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 }
 
-/* Tablets/desktop keep the timeline visible when About opens; the screen
-   compresses instead (copyright hides, margins and row padding tighten)
-   so the whole stack fits without scrolling. */
+/* Tablets/desktop keep the timeline visible when About opens; the
+   screen compresses instead. */
 @media (min-width: 768px) {
   #background:has(#about[open]) .bg-copyright {
     display: none;
@@ -501,24 +514,20 @@ html:not(.js) .slide-nav {
   }
 }
 
-/* Hide the About me collage in short desktop windows so the screen
-   still fits without scrolling. Phones are excluded: they get the
-   compact strip, which fits short viewports on its own. */
+/* Short desktop windows: drop the collage and tighten type so the
+   screen fits. Phones keep their strip. */
 @media (max-height: 760px) and (min-width: 768px) {
   .about-photos {
     display: none;
   }
 
-  /* Short windows also tighten the bio and timeline type, like phones do. */
   #about .disclosure-body p,
   #bg-panel li {
     font-size: 0.8rem;
     line-height: 1.55;
   }
 
-  /* With the collage hidden, hand its column to the bio so it wraps
-     fewer lines, and reclaim the corner-control clearance (the home
-     page has no corner controls). */
+  /* Bio takes the hidden collage's column. */
   #about .disclosure-body > .grid {
     grid-template-columns: minmax(0, 560px) 1fr;
   }
@@ -670,8 +679,7 @@ details[open] .disclosure-body {
   opacity: 0.36;
 }
 
-/* Single-pair cyclers have no arrow controls between the stacks, so the
-   before/after figures need a wider gap of their own. */
+/* Single pairs render no controls between the stacks; widen the gap. */
 .ba-cycler-single {
   gap: 1.5rem;
 }
