@@ -1,14 +1,14 @@
 ---
 title: "Field Operations App"
-description: "A tablet-first app for field supervisors: crew management, daily logging, photo uploads, and Gantt scheduling, all with offline support."
+description: "A tablet-first app for field supervisors: crew management, daily logging, photo uploads, and more, all with offline support."
 date: 2025-03-01
 kicker: "Power Platform · Field"
 tech: ["React", "TypeScript", "CSS Modules", "Dataverse", "Power Automate", "AI Builder", "SharePoint"]
 highlights:
   - "Offline-first: write queue with retry, timeout-wrapped SDK calls"
-  - "Daily manpower entry cut from ~65 taps to 3–8"
+  - "Daily manpower entry redesigned down to 10 taps, photos file into SharePoint by job and date"
   - "AI drafts the daily log narrative; the foreman reviews and approves"
-  - "SVG Gantt schedule; photo pipeline into SharePoint by job and date"
+  - "Unsubmitted logs remind the foreman at 3pm and escalate to the production manager at 5pm"
 beforeAfter:
   - before: { src: "/images/projects/old-field-app1.webp", alt: "Previous field app, wide desktop-style layout" }
     after: { src: "/images/projects/new-field-app1.webp", alt: "Redesigned field app, tablet-first dashboard" }

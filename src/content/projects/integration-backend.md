@@ -1,14 +1,14 @@
 ---
 title: "Integration Backend"
-description: "An Azure Functions layer (~25 functions) keeping QuickBooks, DocuSign, timekeeping, and procurement in sync with the operational platform, built for idempotency and drift detection."
+description: "A TypeScript Azure Functions backend (~25 functions) connecting accounting, signatures, timekeeping, and procurement to the operational platform, built with infrastructure as code, tracing, and contract tests."
 date: 2025-12-01
 kicker: "Azure · Integrations"
 tech: ["TypeScript", "Azure Functions", "Bicep", "Key Vault", "Service Bus", "QuickBooks API", "DocuSign API", "SharePoint"]
 highlights:
-  - "~25 Azure Functions syncing QuickBooks, DocuSign, QuickBooks Time, and Kojo"
-  - "Idempotent writers, drift detection, audit trail on every mutation"
-  - "SharePoint folders, Teams team, and channels provisioned by automation"
-  - "Infrastructure as code with Bicep; Key Vault, Service Bus, OpenTelemetry"
+  - "Syncs to QuickBooks Online, DocuSign, QuickBooks Time, and Kojo"
+  - "Infrastructure as code with Bicep; secrets in Key Vault, queued work in Service Bus"
+  - "OpenTelemetry tracing into Application Insights"
+  - "Contract tests replay recorded HTTP; schema-drift test fails the build"
 images:
   - src: "/images/projects/azure-app-insight.webp"
     alt: "Azure Application Insights application map showing the integration backend's dependency graph and call latencies"
@@ -17,7 +17,7 @@ order: 4
 
 The connective tissue of the platform: a TypeScript Azure Functions app (~25 functions) that moves data between the operational system and the tools the business already runs on, QuickBooks Online for accounting, DocuSign for signatures, QuickBooks Time for payroll hours, and Kojo for material procurement.
 
-The core of it is the **QuickBooks Online sync**. Accounting data has to reconcile exactly, so the sync is bidirectional and defensive: webhook-driven updates, idempotent writers so retries can't double-post, a drift detector that compares systems and flags divergence, and an audit trail for every mutation. QBO stays the financial source of truth; the platform never overwrites it blindly.
+The busiest integration is QuickBooks Online: bidirectional, webhook-driven, and defensive, with QBO staying the financial source of truth. The pipeline itself is its own project; this layer is the engineering around it.
 
 ### Documents and signatures
 

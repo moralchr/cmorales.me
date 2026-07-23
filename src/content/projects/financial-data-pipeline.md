@@ -1,11 +1,11 @@
 ---
 title: "Financial Data Pipeline"
-description: "Webhook-driven sync between QuickBooks Online and Dataverse, real-time financial mirrors powering dashboards and automated billing."
+description: "Mirrors QuickBooks Online into Dataverse in near-real time and reconciles back against it, so financial rollups can be trusted."
 date: 2026-01-01
 kicker: "Automation · Finance"
 tech: ["Power Automate", "Dataverse", "QBO Webhooks", "CloudEvents", "Power BI", "Power Query"]
 highlights:
-  - "QuickBooks webhooks routed through a dispatcher to 12 entity child flows"
+  - "Operational events flow into accounting records automatically"
   - "Handlers are idempotent and tolerate out-of-order events"
   - "Migrated to CloudEvents with a parallel run before cutover"
   - "Feeds Power BI dashboards and live job cost data in the PM app"

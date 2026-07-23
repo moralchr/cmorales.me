@@ -5,10 +5,10 @@ date: 2026-05-01
 kicker: "AI · Automation"
 tech: ["AI Builder", "TypeScript", "MCP Protocol", "MSAL", "Microsoft Graph API", "Dataverse Web API"]
 highlights:
+  - "MCP servers for Dataverse, SharePoint, Teams, and Power Automate"
   - "Insurance certificate and W-9 data extraction with strict JSON output"
   - "Spanish to English T&M ticket translation in production"
   - "Every AI output passes a human review gate before it becomes a record"
-  - "MCP servers for Dataverse, SharePoint, Teams, and Power Automate"
 images:
   - src: "/images/projects/mcp-dataverse.webp"
     alt: "Claude Code using the Dataverse MCP to describe a table's live schema"

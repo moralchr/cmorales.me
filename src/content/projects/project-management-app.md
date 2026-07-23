@@ -1,14 +1,14 @@
 ---
 title: "Project Management App"
-description: "Unified PM tool for tracking contracts, budgets, change orders, T&M tickets, and subcontractor relationships across commercial construction projects."
+description: "Internal tool for tracking contracts, budgets, change orders, T&M tickets, and subcontractor relationships across commercial construction projects."
 date: 2025-06-01
 kicker: "Power Platform · Office"
-tech: ["React", "TypeScript", "Power Platform", "Dataverse", "DocuSign", "Power BI"]
+tech: ["React", "TypeScript", "Power Platform", "Dataverse", "Power Automate", "DocuSign", "Power BI"]
 highlights:
-  - "Contracts, budgets, change orders, and T&M tickets in one app"
-  - "Word contracts generated client-side; DocuSign signing tracked in five stages"
-  - "Issuance blocked until MSA, W-9, and insurance are current"
-  - "Billing cycle-time KPI with amber/red thresholds"
+  - "Job dashboard clicks through to every contract, COR, and budget record"
+  - "Daily logs, crew hours, and T&M tickets flow in from the field app"
+  - "Generates Word contracts client-side and integrates with DocuSign"
+  - "Compliance blocks in place to ensure current MSA, W-9, and insurance"
 collage:
   - { src: "/images/projects/new-pm-app1.webp", alt: "Project management app job overview" }
   - { src: "/images/projects/pa-flow1.webp", alt: "Power Automate flow driving the app" }
@@ -39,4 +39,6 @@ The T&M capture pilot launched with **five success metrics written into the spec
 
 A wizard walks coordinators through scoping a subcontract, then generates the actual Word contract document client-side in TypeScript (via the `docx` library), no server round-trip, no template drift. A five-stage tracker follows the document through DocuSign signing.
 
-One platform constraint shaped this feature: Code Apps run under a strict Content Security Policy that blocks direct calls to external services, so documents route to SharePoint and DocuSign through Dataverse file columns and Power Automate flows, indirection imposed by the platform that turned a simple feature into a real design problem.
+### Orchestration behind the app
+
+Power Automate flows do the work the app can't do from the browser. Code Apps run under a strict Content Security Policy that blocks direct calls to external services, so documents route to SharePoint and DocuSign through Dataverse file columns and flows, indirection imposed by the platform that turned a simple feature into a real design problem. The flows follow a Try/Catch scope pattern: business steps wrapped in scopes, failures written back to the record itself, so a coordinator can see why a document didn't route without anyone opening flow run history. The same pattern carries COR dispatch to the GC.
