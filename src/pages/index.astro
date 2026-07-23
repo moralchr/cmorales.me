@@ -142,6 +142,11 @@ const background = [
                       {project.data.tech.map(t => <span class="pill">{t}</span>)}
                     </div>
                   )}
+                  {(project.data.beforeAfter || project.data.collage || (project.data.images && project.data.images.length > 0)) && (
+                    <button type="button" class="slide-gallery-btn label md:hidden mt-5 text-accent">
+                      View screenshots →
+                    </button>
+                  )}
                 </div>
                 <div class="slide-media hidden md:block">
                   {project.data.beforeAfter && project.data.beforeAfter.length > 0 ? (
@@ -150,7 +155,7 @@ const background = [
                         <span class="label ba-label">Before</span>
                         <div class="ba-stack ba-stack-before">
                           {project.data.beforeAfter.map(p => (
-                            <img class="ba-card" src={p.before.src} alt={p.before.alt} loading="eager" />
+                            <img class="ba-card" src={p.before.src} alt={p.before.alt} data-caption="Before" loading="eager" />
                           ))}
                         </div>
                       </figure>
@@ -163,7 +168,7 @@ const background = [
                         <span class="label ba-label">After</span>
                         <div class="ba-stack ba-stack-after">
                           {project.data.beforeAfter.map(p => (
-                            <img class="ba-card" src={p.after.src} alt={p.after.alt} loading="eager" />
+                            <img class="ba-card" src={p.after.src} alt={p.after.alt} data-caption="After" loading="eager" />
                           ))}
                         </div>
                       </figure>
@@ -184,11 +189,11 @@ const background = [
                   ) : project.data.images && project.data.images.length > 1 ? (
                     <div class="img-stack">
                       {project.data.images.map(im => (
-                        <img src={im.src} alt={im.alt} loading="eager" />
+                        <img src={im.src} alt={im.alt} data-caption={im.caption} loading="eager" />
                       ))}
                     </div>
                   ) : project.data.images && project.data.images.length > 0 ? (
-                    <img src={project.data.images[0].src} alt={project.data.images[0].alt} loading="eager" />
+                    <img src={project.data.images[0].src} alt={project.data.images[0].alt} data-caption={project.data.images[0].caption} loading="eager" />
                   ) : (
                     <div class="photo-frame"><span>Photo coming soon</span></div>
                   )}
@@ -320,8 +325,9 @@ const background = [
     <!-- Photo preview (click any About me photo; arrows/swipe/scroll to browse) -->
     <dialog id="photo-viewer" aria-label="Photo preview">
       <button type="button" class="slide-arrow shrink-0" id="pv-prev" aria-label="Previous photo">←</button>
-      <div class="flex flex-col items-center gap-3 min-w-0">
+      <div class="flex flex-col items-center gap-2 min-w-0">
         <img id="photo-viewer-img" src="" alt="" />
+        <span id="pv-caption" class="pv-caption"></span>
         <span id="pv-counter" class="label pv-counter"></span>
       </div>
       <button type="button" class="slide-arrow shrink-0" id="pv-next" aria-label="Next photo">→</button>
@@ -493,45 +499,61 @@ const background = [
     // images (and the About collage) browse only within their own set.
     const viewerImg = document.getElementById('photo-viewer-img') as HTMLImageElement;
     const pvCounter = document.getElementById('pv-counter')!;
-    let gallery: { src: string; alt: string }[] = [];
+    const pvCaption = document.getElementById('pv-caption')!;
+    const pvPrev = document.getElementById('pv-prev') as HTMLButtonElement;
+    const pvNext = document.getElementById('pv-next') as HTMLButtonElement;
+    type GalleryItem = { src: string; alt: string; caption?: string };
+    let gallery: GalleryItem[] = [];
     let pvIdx = 0;
 
     function showPhoto(i: number) {
       if (gallery.length === 0) return;
       pvIdx = (i + gallery.length) % gallery.length;
-      viewerImg.src = gallery[pvIdx].src;
-      viewerImg.alt = gallery[pvIdx].alt;
-      pvCounter.textContent = `${pvIdx + 1} / ${gallery.length}`;
+      const item = gallery[pvIdx];
+      viewerImg.src = item.src;
+      viewerImg.alt = item.alt;
+      pvCaption.textContent = item.caption || '';
+      pvCaption.hidden = !item.caption;
+      // Single-image galleries have nothing to browse: drop the arrows and
+      // the "1 / 1" counter.
+      const multi = gallery.length > 1;
+      pvCounter.textContent = multi ? `${pvIdx + 1} / ${gallery.length}` : '';
+      pvCounter.hidden = !multi;
+      pvPrev.style.display = multi ? '' : 'none';
+      pvNext.style.display = multi ? '' : 'none';
     }
 
-    function openGallery(items: { src: string; alt: string }[], index: number) {
+    function openGallery(items: GalleryItem[], index: number) {
       if (items.length === 0) return;
       gallery = items;
       showPhoto(index);
       viewer.showModal();
     }
 
+    const readItems = (imgs: HTMLImageElement[]): GalleryItem[] =>
+      imgs.map(im => ({ src: im.src, alt: im.alt, caption: im.dataset.caption || '' }));
+
     // About-me photo collage.
     const aboutBtns = Array.from(document.querySelectorAll<HTMLElement>('.about-photo'));
-    const aboutItems = aboutBtns.map(b => {
-      const im = b.querySelector('img')!;
-      return { src: im.src, alt: im.alt };
-    });
+    const aboutItems = readItems(aboutBtns.map(b => b.querySelector('img')!));
     aboutBtns.forEach((btn, i) => btn.addEventListener('click', () => openGallery(aboutItems, i)));
 
-    // Project images: each slide's media is its own gallery.
-    document.querySelectorAll<HTMLElement>('.slide-media').forEach(media => {
-      const imgs = Array.from(media.querySelectorAll<HTMLImageElement>('img'));
+    // Project images: each slide's media is its own gallery. On mobile the
+    // media column is hidden (slides must fit without scrolling), so a
+    // "View screenshots" button opens the same gallery instead.
+    document.querySelectorAll<HTMLElement>('.slide').forEach(slide => {
+      const imgs = Array.from(slide.querySelectorAll<HTMLImageElement>('.slide-media img'));
       if (imgs.length === 0) return;
-      const items = imgs.map(im => ({ src: im.src, alt: im.alt }));
+      const items = readItems(imgs);
       imgs.forEach((im, i) => {
         im.classList.add('zoomable');
         im.addEventListener('click', () => openGallery(items, i));
       });
+      slide.querySelector('.slide-gallery-btn')?.addEventListener('click', () => openGallery(items, 0));
     });
 
-    document.getElementById('pv-prev')!.addEventListener('click', () => showPhoto(pvIdx - 1));
-    document.getElementById('pv-next')!.addEventListener('click', () => showPhoto(pvIdx + 1));
+    pvPrev.addEventListener('click', () => showPhoto(pvIdx - 1));
+    pvNext.addEventListener('click', () => showPhoto(pvIdx + 1));
     viewer.addEventListener('click', e => {
       if (e.target === viewer) viewer.close(); // backdrop only
     });
