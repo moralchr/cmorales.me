@@ -243,8 +243,10 @@ html:not(.js) .deck-screen {
   padding: 1rem 1.5rem 3.5rem;
 }
 
-/* Phones: keep slide + background text clear of the fixed screen dots. */
-@media (max-width: 640px) {
+/* Below md (where the markup itself switches to the inline accordion and
+   hides the side panel): keep slide + background text clear of the fixed
+   screen dots. */
+@media (max-width: 767px) {
   .slide {
     padding-right: 2.75rem;
   }
@@ -279,15 +281,75 @@ html:not(.js) .deck-screen {
   }
 
   /* Opening About me on a phone hands the (scroll-locked) screen over to
-     it: the timeline + certs collapse so the photos/bio fit, and About
-     moves up under the heading. Closing it restores the timeline. */
+     it: the timeline, certs, and copyright collapse so the photos/bio fit,
+     and About moves up under the heading. Closing it restores the timeline. */
   #background:has(#about[open]) #bg-list,
-  #background:has(#about[open]) .bg-certs {
+  #background:has(#about[open]) .bg-certs,
+  #background:has(#about[open]) .bg-copyright {
     display: none;
   }
 
   #background:has(#about[open]) #about {
     margin-top: 1.5rem;
+  }
+
+  /* The tall two-column collage doesn't fit a phone with the bio below
+     it: flatten it into a short three-across strip. Taps still open the
+     full-size preview. */
+  .about-photos {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 100%;
+  }
+
+  .about-photos > div {
+    display: contents;
+  }
+
+  .about-photo {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 88px;
+  }
+
+  .about-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Bio text tightens like the timeline bullets do at this width. */
+  #about .disclosure-body p {
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+
+  /* Single column: at 640-767px the sm: two-column grid squeezes the bio
+     into a strip-narrow column that grows too tall; stack instead. */
+  #about .disclosure-body > .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablets/desktop keep the timeline visible when About opens; the screen
+   compresses instead (copyright hides, margins and row padding tighten)
+   so the whole stack fits without scrolling. */
+@media (min-width: 768px) {
+  #background:has(#about[open]) .bg-copyright {
+    display: none;
+  }
+
+  #background:has(#about[open]) #about {
+    margin-top: 1rem;
+  }
+
+  #background:has(#about[open]) .bg-certs {
+    margin-top: 1rem;
+  }
+
+  #background:has(#about[open]) .bg-row {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 }
 
@@ -439,11 +501,30 @@ html:not(.js) .slide-nav {
   }
 }
 
-/* Hide the About me collage on short viewports so the screen
-   still fits without scrolling. */
-@media (max-height: 760px) {
+/* Hide the About me collage in short desktop windows so the screen
+   still fits without scrolling. Phones are excluded: they get the
+   compact strip, which fits short viewports on its own. */
+@media (max-height: 760px) and (min-width: 768px) {
   .about-photos {
     display: none;
+  }
+
+  /* Short windows also tighten the bio and timeline type, like phones do. */
+  #about .disclosure-body p,
+  #bg-panel li {
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+
+  /* With the collage hidden, hand its column to the bio so it wraps
+     fewer lines, and reclaim the corner-control clearance (the home
+     page has no corner controls). */
+  #about .disclosure-body > .grid {
+    grid-template-columns: minmax(0, 560px) 1fr;
+  }
+
+  #background:has(#about[open]) {
+    padding-top: 1.5rem;
   }
 }
 
