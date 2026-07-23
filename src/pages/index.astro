@@ -286,12 +286,12 @@ const background = [
               </svg>
             </summary>
             <div class="disclosure-body mt-4 pb-2">
-              <div class="grid sm:grid-cols-[auto_1fr] md:grid-cols-[auto_minmax(0,440px)_1fr] gap-x-10 gap-y-4 items-center">
+              <div class="grid sm:grid-cols-[auto_1fr] md:grid-cols-[auto_minmax(0,400px)_minmax(230px,1fr)] gap-x-8 gap-y-4 items-center">
                 <!-- Collage: cruise + hogwarts stacked left (natural
                      aspect), greyhound full-height right. Click opens
                      the preview dialog. -->
-                <div class="about-photos grid grid-cols-2 gap-2.5 w-full max-w-[280px]">
-                  <div class="flex flex-col gap-2.5">
+                <div class="about-photos grid grid-cols-2 gap-2 w-full max-w-[340px]">
+                  <div class="flex flex-col gap-2">
                     <button type="button" class="about-photo block cursor-zoom-in" aria-label="View photo larger">
                       <img src="/images/about/cruise.jpg" alt="Chris and his partner at a cruise port" width="845" height="900" loading="lazy" class="w-full h-auto rounded-lg border border-rule" />
                     </button>
@@ -305,24 +305,43 @@ const background = [
                 </div>
                 <!-- TODO(chris): add anything personal you want here:
                      hobbies, interests, what you're into outside work. -->
-                <p class="text-ink-muted text-sm leading-relaxed">
-                  I came to software from operations, not a CS degree. At KPMG
-                  I started automating my own reporting work, and building
-                  tools became the job. Based in Orlando.
-                </p>
+                <div class="space-y-4">
+                  <p class="text-sm text-ink leading-[1.7] font-medium">
+                    My journey so far has been driven by a single question:
+                    <em class="text-accent">Is there a better way to do this?</em>
+                  </p>
+                  <p class="text-ink-muted text-sm leading-[1.7]">
+                    After transitioning from banking to project management at a Big 4 firm, I
+                    experimented with Power Automate and Alteryx to build my first workflow
+                    automations. Once I saw how much repetitive administrative work and scattered
+                    spreadsheet chaos I was eliminating, I knew I wanted to do more.
+                  </p>
+                  <p class="text-ink-muted text-sm leading-[1.7]">
+                    So when a small business offered me the opportunity to architect and deploy
+                    solutions from the ground up, I took it. Having built and implemented my own
+                    systems proved that the right optimizations don't just save time, they help
+                    measurably move a business forward.
+                  </p>
+                </div>
                 <!-- TODO(chris): edit this list, these are guesses from
                      the photos; swap in whatever is actually true. -->
                 <div class="hidden md:block">
                   <span class="label">Off the clock</span>
-                  <ul class="mt-3 space-y-2">
-                    <li class="text-ink-muted text-sm flex gap-3">
-                      <span class="text-accent shrink-0">·</span>Orlando, FL
+                  <ul class="mt-4 space-y-3">
+                    <li class="text-ink-muted text-sm leading-[1.7] flex gap-3">
+                      <span class="text-accent shrink-0">·</span>Vacationing when I can
                     </li>
-                    <li class="text-ink-muted text-sm flex gap-3">
-                      <span class="text-accent shrink-0">·</span>Greyhound owner
+                    <li class="text-ink-muted text-sm leading-[1.7] flex gap-3">
+                      <span class="text-accent shrink-0">·</span>Taking pics of my Greyhound
                     </li>
-                    <li class="text-ink-muted text-sm flex gap-3">
-                      <span class="text-accent shrink-0">·</span>Traveling when I can
+                    <li class="text-ink-muted text-sm leading-[1.7] flex gap-3">
+                      <span class="text-accent shrink-0">·</span>Re-watching movies
+                    </li>
+                    <li class="text-ink-muted text-sm leading-[1.7] flex gap-3">
+                      <span class="text-accent shrink-0">·</span>Explaining board games
+                    </li>
+                    <li class="text-ink-muted text-sm leading-[1.7] flex gap-3">
+                      <span class="text-accent shrink-0">·</span>Going for a hike
                     </li>
                   </ul>
                 </div>
