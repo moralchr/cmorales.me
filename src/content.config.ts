@@ -34,6 +34,21 @@ const projects = defineCollection({
         })
       )
       .optional(),
+    // Before/after image pairs shown stacked (before above, after below)
+    // on the slide, cycled together by one arrow control. No preview modal.
+    beforeAfter: z
+      .array(
+        z.object({
+          before: z.object({ src: z.string(), alt: z.string() }),
+          after: z.object({ src: z.string(), alt: z.string() }),
+        })
+      )
+      .optional(),
+    // Collage layout: the first image sits top-left (hero); the rest form
+    // a bottom-right row, left to right. Used for the PM app (app + flows).
+    collage: z
+      .array(z.object({ src: z.string(), alt: z.string() }))
+      .optional(),
     url: z.string().optional(),
     github: z.string().optional(),
     order: z.number().optional(),

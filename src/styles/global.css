@@ -418,12 +418,159 @@ details[open] .disclosure-body {
   color: var(--color-ink-faint);
 }
 
-.slide-media img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+/* Single-image slides only (direct child) — nested card/collage images
+   have their own sizing rules below. */
+.slide-media > img {
+  max-width: 100%;
+  max-height: 72vh;
+  width: auto;
+  height: auto;
   display: block;
   border: 1px solid var(--color-rule);
+}
+
+/* Any slide image opens the preview on click. */
+.zoomable {
+  cursor: zoom-in;
+}
+
+/* Multiple single-images stacked vertically, each height-capped so the
+   set fits the viewport-locked slide. */
+.img-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.img-stack img {
+  max-width: 100%;
+  max-height: 34vh;
+  width: auto;
+  height: auto;
+  display: block;
+  border: 1px solid var(--color-rule);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
+}
+
+/* Before/after cycler: stacked pair (before above, after below) whose
+   heights are capped so the pair fits the viewport-locked slide. */
+.ba-cycler {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ba-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.ba-label {
+  color: var(--color-ink-faint);
+  font-size: 0.6rem;
+}
+
+/* Card stack: every version occupies the same grid cell and overlaps;
+   JS (or the nth-child fallback) fans the ones behind the front card. */
+.ba-stack {
+  display: grid;
+  place-items: center;
+}
+
+.ba-card {
+  grid-area: 1 / 1;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  border: 1px solid var(--color-rule);
+  background: var(--color-paper);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
+  transform-origin: center center;
+  transition:
+    transform 0.4s var(--ease-out-expo),
+    opacity 0.4s ease;
+}
+
+.ba-stack-before .ba-card {
+  max-height: 32vh;
+}
+
+.ba-stack-after .ba-card {
+  max-height: 40vh;
+}
+
+/* Fallback fan before JS runs (progressive enhancement, up to 3 cards). */
+.ba-card:nth-child(1) {
+  transform: none;
+  z-index: 3;
+  opacity: 1;
+}
+.ba-card:nth-child(2) {
+  transform: translate(8px, 6px) rotate(3deg) scale(0.955);
+  z-index: 2;
+  opacity: 0.68;
+}
+.ba-card:nth-child(3) {
+  transform: translate(16px, 12px) rotate(6deg) scale(0.91);
+  z-index: 1;
+  opacity: 0.36;
+}
+
+.ba-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ba-count {
+  color: var(--color-ink-faint);
+  font-size: 0.65rem;
+}
+
+/* PM app collage: hero image top-left, supporting flows bottom-right. */
+.pm-collage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pm-collage img {
+  display: block;
+  width: auto;
+  height: auto;
+  border: 1px solid var(--color-rule);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
+}
+
+.pm-collage-top {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pm-collage-top img {
+  max-width: 88%;
+  max-height: 42vh;
+  margin-left: -1.75rem;
+}
+
+.pm-collage-bottom {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
+/* Equal height keeps the two flows consistent despite different aspects. */
+.pm-collage-bottom img {
+  height: 32vh;
+  width: auto;
+  max-width: 100%;
 }
 
 /* Hide media on short viewports so slide text always fits. */

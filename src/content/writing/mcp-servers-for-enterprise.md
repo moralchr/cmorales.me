@@ -12,17 +12,17 @@ I built four MCP servers that connect to the Microsoft enterprise stack. Here's 
 
 ## What each server does
 
-**Dataverse** — the most impactful one. The AI can describe table schemas, query records, and inspect live data. Before writing service code, it reads the actual column names, types, and relationships. This eliminated an entire class of bugs where field names were guessed wrong.
+**Dataverse**: the most impactful one. The AI can describe table schemas, query records, and inspect live data. Before writing service code, it reads the actual column names, types, and relationships. This eliminated an entire class of bugs where field names were guessed wrong.
 
-**SharePoint** — list libraries, browse folders, search files. When the AI needs to understand how documents are organized or find a reference file, it searches SharePoint instead of asking me to navigate the UI and paste paths.
+**SharePoint**: list libraries, browse folders, search files. When the AI needs to understand how documents are organized or find a reference file, it searches SharePoint instead of asking me to navigate the UI and paste paths.
 
-**Teams** — find teams by project ID, list channels and members. This is useful when building notification flows — the AI can look up who's on a team and which channel to target.
+**Teams**: find teams by project ID, list channels and members. This is useful when building notification flows, the AI can look up who's on a team and which channel to target.
 
-**Power Automate** — list, read, create, and modify cloud flows. The AI can inspect existing automation, understand what triggers and actions are in use, and create new flows through the API.
+**Power Automate**: list, read, create, and modify cloud flows. The AI can inspect existing automation, understand what triggers and actions are in use, and create new flows through the API.
 
 ## Authentication
 
-All four use MSAL with device code flow for initial setup. You run the server, it gives you a code, you enter it in a browser, and the token is cached locally. After that, the server starts automatically when you open the project — no per-session auth.
+All four use MSAL with device code flow for initial setup. You run the server, it gives you a code, you enter it in a browser, and the token is cached locally. After that, the server starts automatically when you open the project, no per-session auth.
 
 ## The real value
 

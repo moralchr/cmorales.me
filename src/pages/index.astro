@@ -18,7 +18,7 @@ const screens = [
 
 const background = [
   {
-    period: '2025 —',
+    period: '2025 to Present',
     place: 'Annapurna Construction',
     role: 'Software / Systems Developer',
     bullets: [
@@ -30,7 +30,7 @@ const background = [
     ],
   },
   {
-    period: '2021 — 2025',
+    period: '2021 to 2025',
     place: 'KPMG US',
     role: 'Senior PMO Analyst',
     bullets: [
@@ -41,7 +41,7 @@ const background = [
     ],
   },
   {
-    period: '2017 — 2021',
+    period: '2017 to 2021',
     place: 'Westgate Resorts',
     role: 'Administrative Assistant',
     bullets: [
@@ -118,7 +118,7 @@ const background = [
         <div class="slides" id="slides">
           {projects.map(project => (
             <article class="slide" id={project.id}>
-              <div class="w-full max-w-[1100px] mx-auto grid md:grid-cols-[1.1fr_1fr] gap-8 md:gap-12 items-center">
+              <div class="w-full max-w-[1100px] mx-auto grid md:grid-cols-[1fr_1.2fr] gap-8 md:gap-12 items-center">
                 <div class="min-w-0">
                   {project.data.kicker && (
                     <span class="label text-accent text-[0.65rem]">{project.data.kicker}</span>
@@ -131,7 +131,7 @@ const background = [
                     <ul class="mt-5 space-y-2">
                       {project.data.highlights.map(h => (
                         <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
-                          <span class="text-accent shrink-0 mt-0.5">—</span>
+                          <span class="text-accent shrink-0 mt-0.5">·</span>
                           {h}
                         </li>
                       ))}
@@ -144,8 +144,51 @@ const background = [
                   )}
                 </div>
                 <div class="slide-media hidden md:block">
-                  {project.data.images && project.data.images.length > 0 ? (
-                    <img src={project.data.images[0].src} alt={project.data.images[0].alt} loading="lazy" />
+                  {project.data.beforeAfter && project.data.beforeAfter.length > 0 ? (
+                    <div class="ba-cycler">
+                      <figure class="ba-item">
+                        <span class="label ba-label">Before</span>
+                        <div class="ba-stack ba-stack-before">
+                          {project.data.beforeAfter.map(p => (
+                            <img class="ba-card" src={p.before.src} alt={p.before.alt} loading="eager" />
+                          ))}
+                        </div>
+                      </figure>
+                      <div class="ba-controls" role="group" aria-label="Cycle before and after comparisons">
+                        <button type="button" class="slide-arrow ba-prev" aria-label="Previous comparison">←</button>
+                        <span class="label ba-count">1 / {project.data.beforeAfter.length}</span>
+                        <button type="button" class="slide-arrow ba-next" aria-label="Next comparison">→</button>
+                      </div>
+                      <figure class="ba-item">
+                        <span class="label ba-label">After</span>
+                        <div class="ba-stack ba-stack-after">
+                          {project.data.beforeAfter.map(p => (
+                            <img class="ba-card" src={p.after.src} alt={p.after.alt} loading="eager" />
+                          ))}
+                        </div>
+                      </figure>
+                    </div>
+                  ) : project.data.collage && project.data.collage.length > 0 ? (
+                    <div class="pm-collage">
+                      <div class="pm-collage-top">
+                        <img src={project.data.collage[0].src} alt={project.data.collage[0].alt} loading="eager" />
+                      </div>
+                      {project.data.collage.length > 1 && (
+                        <div class="pm-collage-bottom">
+                          {project.data.collage.slice(1).map(c => (
+                            <img src={c.src} alt={c.alt} loading="eager" />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : project.data.images && project.data.images.length > 1 ? (
+                    <div class="img-stack">
+                      {project.data.images.map(im => (
+                        <img src={im.src} alt={im.alt} loading="eager" />
+                      ))}
+                    </div>
+                  ) : project.data.images && project.data.images.length > 0 ? (
+                    <img src={project.data.images[0].src} alt={project.data.images[0].alt} loading="eager" />
                   ) : (
                     <div class="photo-frame"><span>Photo coming soon</span></div>
                   )}
@@ -195,7 +238,7 @@ const background = [
                   <ul class="mt-4 space-y-2.5">
                     {b.bullets.map(item => (
                       <li class="text-ink-muted text-sm leading-relaxed flex gap-3">
-                        <span class="text-accent shrink-0 mt-0.5">—</span>
+                        <span class="text-accent shrink-0 mt-0.5">·</span>
                         {item}
                       </li>
                     ))}
@@ -242,26 +285,26 @@ const background = [
                     <img src="/images/about/greyhound.jpg" alt="Chris with his greyhound in a sweater" width="675" height="900" loading="lazy" class="w-full h-full object-cover rounded-lg border border-rule" />
                   </button>
                 </div>
-                <!-- TODO(chris): add anything personal you want here —
+                <!-- TODO(chris): add anything personal you want here:
                      hobbies, interests, what you're into outside work. -->
                 <p class="text-ink-muted text-sm leading-relaxed">
                   I came to software from operations, not a CS degree. At KPMG
                   I started automating my own reporting work, and building
                   tools became the job. Based in Orlando.
                 </p>
-                <!-- TODO(chris): edit this list — these are guesses from
+                <!-- TODO(chris): edit this list, these are guesses from
                      the photos; swap in whatever is actually true. -->
                 <div class="hidden md:block">
                   <span class="label">Off the clock</span>
                   <ul class="mt-3 space-y-2">
                     <li class="text-ink-muted text-sm flex gap-3">
-                      <span class="text-accent shrink-0">—</span>Orlando, FL
+                      <span class="text-accent shrink-0">·</span>Orlando, FL
                     </li>
                     <li class="text-ink-muted text-sm flex gap-3">
-                      <span class="text-accent shrink-0">—</span>Greyhound owner
+                      <span class="text-accent shrink-0">·</span>Greyhound owner
                     </li>
                     <li class="text-ink-muted text-sm flex gap-3">
-                      <span class="text-accent shrink-0">—</span>Traveling when I can
+                      <span class="text-accent shrink-0">·</span>Traveling when I can
                     </li>
                   </ul>
                 </div>
@@ -443,30 +486,50 @@ const background = [
       });
     }));
 
-    // Photo preview gallery: click a photo to open; arrows, swipe,
-    // scroll, or ←/→ browse; backdrop click or Esc closes.
+    // Preview gallery: click an About-me photo or any project image to
+    // open the modal; browse with the arrows, ←/→, scroll wheel, or swipe
+    // (wheel/touch handled in the deck listeners above). Backdrop or Esc
+    // closes. The gallery list is swapped per source so each slide's
+    // images (and the About collage) browse only within their own set.
     const viewerImg = document.getElementById('photo-viewer-img') as HTMLImageElement;
     const pvCounter = document.getElementById('pv-counter')!;
-    const pvButtons = Array.from(document.querySelectorAll<HTMLElement>('.about-photo'));
-    const pvPhotos = pvButtons.map(b => {
-      const img = b.querySelector('img')!;
-      return { src: img.src, alt: img.alt };
-    });
+    let gallery: { src: string; alt: string }[] = [];
     let pvIdx = 0;
 
     function showPhoto(i: number) {
-      pvIdx = (i + pvPhotos.length) % pvPhotos.length;
-      viewerImg.src = pvPhotos[pvIdx].src;
-      viewerImg.alt = pvPhotos[pvIdx].alt;
-      pvCounter.textContent = `${pvIdx + 1} / ${pvPhotos.length}`;
+      if (gallery.length === 0) return;
+      pvIdx = (i + gallery.length) % gallery.length;
+      viewerImg.src = gallery[pvIdx].src;
+      viewerImg.alt = gallery[pvIdx].alt;
+      pvCounter.textContent = `${pvIdx + 1} / ${gallery.length}`;
     }
 
-    pvButtons.forEach((btn, i) =>
-      btn.addEventListener('click', () => {
-        showPhoto(i);
-        viewer.showModal();
-      })
-    );
+    function openGallery(items: { src: string; alt: string }[], index: number) {
+      if (items.length === 0) return;
+      gallery = items;
+      showPhoto(index);
+      viewer.showModal();
+    }
+
+    // About-me photo collage.
+    const aboutBtns = Array.from(document.querySelectorAll<HTMLElement>('.about-photo'));
+    const aboutItems = aboutBtns.map(b => {
+      const im = b.querySelector('img')!;
+      return { src: im.src, alt: im.alt };
+    });
+    aboutBtns.forEach((btn, i) => btn.addEventListener('click', () => openGallery(aboutItems, i)));
+
+    // Project images: each slide's media is its own gallery.
+    document.querySelectorAll<HTMLElement>('.slide-media').forEach(media => {
+      const imgs = Array.from(media.querySelectorAll<HTMLImageElement>('img'));
+      if (imgs.length === 0) return;
+      const items = imgs.map(im => ({ src: im.src, alt: im.alt }));
+      imgs.forEach((im, i) => {
+        im.classList.add('zoomable');
+        im.addEventListener('click', () => openGallery(items, i));
+      });
+    });
+
     document.getElementById('pv-prev')!.addEventListener('click', () => showPhoto(pvIdx - 1));
     document.getElementById('pv-next')!.addEventListener('click', () => showPhoto(pvIdx + 1));
     viewer.addEventListener('click', e => {
@@ -476,6 +539,33 @@ const background = [
       if (!viewer.open) return;
       if (e.key === 'ArrowRight') showPhoto(pvIdx + 1);
       else if (e.key === 'ArrowLeft') showPhoto(pvIdx - 1);
+    });
+
+    // Before/after cyclers: two card stacks (before above, after below).
+    // One arrow pair advances BOTH stacks in lockstep, fanning the other
+    // versions behind the front card. Deliberately NOT a modal preview.
+    document.querySelectorAll<HTMLElement>('.ba-cycler').forEach(cycler => {
+      const stacks = Array.from(cycler.querySelectorAll<HTMLElement>('.ba-stack'));
+      const count = cycler.querySelector<HTMLElement>('.ba-count');
+      if (stacks.length === 0 || !count) return;
+      const total = stacks[0].querySelectorAll('.ba-card').length;
+      if (total === 0) return;
+      let i = 0;
+      const layout = () => {
+        stacks.forEach(stack => {
+          const cards = Array.from(stack.querySelectorAll<HTMLElement>('.ba-card'));
+          cards.forEach((card, j) => {
+            const d = (j - i + cards.length) % cards.length; // 0 = front
+            card.style.transform = `translate(${d * 8}px, ${d * 6}px) rotate(${d * 3}deg) scale(${1 - d * 0.045})`;
+            card.style.zIndex = String(cards.length - d);
+            card.style.opacity = String(1 - d * 0.32);
+          });
+        });
+        count.textContent = `${i + 1} / ${total}`;
+      };
+      cycler.querySelector('.ba-prev')!.addEventListener('click', () => { i = (i - 1 + total) % total; layout(); });
+      cycler.querySelector('.ba-next')!.addEventListener('click', () => { i = (i + 1) % total; layout(); });
+      layout();
     });
 
     if (location.hash) jumpToHash(location.hash);

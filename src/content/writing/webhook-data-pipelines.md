@@ -10,7 +10,7 @@ Syncing data between two systems that weren't designed to talk to each other is 
 
 ## Architecture: dispatcher + child flows
 
-A single HTTP-triggered flow receives webhook events. It inspects the event type and routes to one of twelve entity-specific child flows — one each for customers, vendors, invoices, bills, and so on. Each child handles creates, updates, and deletes for its entity, managing line items and linked transactions as child records.
+A single HTTP-triggered flow receives webhook events. It inspects the event type and routes to one of twelve entity-specific child flows, one each for customers, vendors, invoices, bills, and so on. Each child handles creates, updates, and deletes for its entity, managing line items and linked transactions as child records.
 
 The dispatcher pattern keeps each child flow focused and testable. When something breaks with invoice sync, you're debugging one flow, not a monolith.
 
@@ -26,6 +26,6 @@ Halfway through, the webhook provider changed their event format. Instead of a b
 
 **Idempotency.** Webhooks fire more than once. Every handler has to be safe to replay. Upsert-by-external-ID instead of blind creates.
 
-**Ordering.** Events arrive out of order. A line item update can arrive before the parent invoice create. The child flows handle this with retry — if the parent doesn't exist yet, wait and try again.
+**Ordering.** Events arrive out of order. A line item update can arrive before the parent invoice create. The child flows handle this with retry, if the parent doesn't exist yet, wait and try again.
 
 **Schema drift.** The accounting platform adds fields without notice. The pipeline ignores unknown fields rather than failing on them.
